@@ -2,7 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import googleBook from '../api/googleBook';
 import HomeProgress from './home/HomeProgress';
-import { CircularProgress, Paper, Grid, Container, Card, Typography, CardMedia } from '@material-ui/core';
+import {
+    CircularProgress, Paper, Grid, Container,
+    Card, Typography, CardMedia
+} from '@material-ui/core';
 import { Context } from '../context/Context';
 import harryPotter from '../images/harryPotter.jpg';
 
@@ -16,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     position: {
         display: 'flex',
         margin: 'auto',
+        marginTop: 100,
     },
     article: {
         padding: 10,
@@ -45,22 +49,22 @@ export default function Home() {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            termSort(genre);
-        }, 1500);
+        termSort(genre);
     }, []);
+
+    useEffect(() => {
+        termSort(genre);
+    }, [genre])
 
     return (
         <>
-            <Container style={{ paddingTop: '4%' }} maxWidth="xl">
+            <Container style={{ paddingTop: '4%' }} maxWidth="lg">
                 <Paper style={{ marginBottom: '2%', }} >
                     <Typography className={classes.title}>News and Reviews from the World of Books!</Typography>
                 </Paper>
                 <Grid container spacing={2}>
-
-
-                    {[0, 1, 2, 3].map((value) => (
-                        <Grid key={value} item xs={12} sm={6} md={4} xl={3}>
+                    {[0, 1, 2].map((value) => (
+                        <Grid key={value} item xs={12} sm={6} md={4}>
                             <Grid item>
                                 <Paper className={classes.article} elevation={6}>
                                     <Typography style={{ marginTop: 10 }} variant="h5">Harry Potter is a Bestseller</Typography>
@@ -73,10 +77,7 @@ export default function Home() {
                                     ipsam possimus iusto quaerat ratione, doloribus
                                     nesciunt corporis quos tempore eum molestias explicabo repudiandae aperiam quae consectetur.
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint commodi reprehenderit dolor totam
-                                    ipsam possimus iusto quaerat ratione, doloribus
-                                    nesciunt corporis quos tempore eum molestias explicabo repudiandae aperiam quae consectetur.
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint commodi reprehenderit dolor totam
-                                    ipsam possimus iusto quaerat ratione, doloribus
+                                    ipsam possimus iusto quaerat ratione, doloribus.
                                         <br /><span style={{ fontSize: 20 }}>...more</span></p>
                                 </Paper>
                             </Grid>
@@ -85,9 +86,8 @@ export default function Home() {
 
                 </Grid>
             </Container>
-
             <div className={classes.root}>
-                {news.length === 0 || news === undefined ? <CircularProgress disableShrink className={classes.position} /> : <HomeProgress news={news} termSort={termSort} />}
+                {news.length === 0 || news === undefined ? <CircularProgress disableShrink className={classes.position} /> : <HomeProgress news={news} />}
             </div>
         </>
     )

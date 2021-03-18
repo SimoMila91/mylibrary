@@ -34,13 +34,14 @@ export default function ModalFilters({ handleClose, onClose }) {
             <DialogContent>
                 <div className={classes.container}>
                     <FormControl className={classes.formControl}>
-                        <InputLabel>Age</InputLabel>
+                        <InputLabel>Order by</InputLabel>
                         <Select
                             value={age}
                             native
                             onChange={e => setAge(e.target.value)}
                         >
                             <option aria-label="None" value='' />
+                            <option value="">None</option>
                             <option value="Newest">Newest</option>
                             <option value="Oldest">Oldest</option>
                         </Select>
@@ -53,6 +54,7 @@ export default function ModalFilters({ handleClose, onClose }) {
                             onChange={handleChangeType}
                         >
                             <option aria-label="None" value='' />
+                            <option value="">None</option>
                             <option value="free-ebooks">Free-ebooks</option>
                             <option value="ebooks">Only ebooks</option>
                         </Select>

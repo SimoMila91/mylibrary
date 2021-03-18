@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
+
 
 const font = "'Satisfy', cursive";
 
@@ -37,10 +37,6 @@ export default function NavbarContent() {
     return (
         <div>
             <div className={classes.titleWrapper}>
-                <div style={{ paddingTop: 20 }}>
-                    <Typography variant="h6" className={classes.preTitle} style={{ fontWeight: "bolder" }}>- THE OFFICIAL SITE OF -</Typography>
-                    <Typography variant="h1" className={classes.titleStyle}>My Library</Typography>
-                </div>
                 <div className={classes.linkStyle}>
                     <ul>
                         <li><NavLink to="/" style={{ color: '#212529', textDecoration: 'none' }}>HOME</NavLink></li>

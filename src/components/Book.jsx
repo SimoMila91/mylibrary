@@ -1,5 +1,5 @@
 import { Container } from '@material-ui/core';
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import googleBook from '../api/googleBook';
 import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,16 +16,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Book() {
     const classes = useStyles();
-    const { type, age } = useContext(Context);
-
-    const [books, setBooks] = useState([]);
+    const { type, age, books, setBooks } = useContext(Context);
 
     let typeChange = type !== '' ? `&filter=${type}` : '';
 
     const onTermSubmit = async (term) => {
-        const response = await googleBook.get(`/books/v1/volumes?q=${term}&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
+        const response = await googleBook.get(`/books/v1/volumes?q=${term}&printType=books&&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
         setBooks(response.data.items);
-        console.log(response.data.items);
     };
 
     const sortFunction = (a, b) => {

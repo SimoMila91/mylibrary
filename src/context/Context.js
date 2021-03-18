@@ -3,9 +3,28 @@ import React, { useState } from 'react';
 export const Context = React.createContext();
 export const ContextProvider = props => {
 
+    const [books, setBooks] = useState([]);
     const [age, setAge] = useState('');
     const [type, setType] = useState('');
     const [genre, setGenre] = useState('fiction');
+    const [snackOpen, setSnackOpen] = useState(false);
+    const [favorite, setFavorite] = useState(false);
+
+    const favoriteBooks = (i, e) => {
+        e.preventDefault();
+        if (favorite && i)
+            setFavorite(false);
+        else if (!favorite && i)
+            setFavorite(true);
+    };
+
+    const registered = () => {
+        setSnackOpen(true);
+    };
+
+    const reSetSnackbar = () => {
+        setSnackOpen(false);
+    };
 
     const handleChangeAge = (age) => {
         setAge(age);
@@ -32,7 +51,14 @@ export const ContextProvider = props => {
                 setType,
                 genre,
                 handleGenreChange,
-                setGenre
+                setGenre,
+                registered,
+                reSetSnackbar,
+                snackOpen,
+                favorite,
+                favoriteBooks,
+                books,
+                setBooks,
             }}
         >
             {props.children}

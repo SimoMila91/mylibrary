@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 
 const theme = createMuiTheme({
   typography: {
@@ -10,11 +11,8 @@ const theme = createMuiTheme({
       'sans serif'
     ].join(','),
   },
-  props: {
-    MuiButtonBase: {
-      // The properties to apply
-      disableRipple: true, // No more ripple, on the whole application 💣!
-    },
+  palette: {
+    primary: green,
   }
 });
 

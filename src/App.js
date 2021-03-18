@@ -7,13 +7,15 @@ import Main from './components/Main';
 import { ContextProvider } from './context/Context';
 
 
-
 export default function App() {
+
+
+
   return (
     <div className="App">
       <ContextProvider>
         <BrowserRouter>
-          <Container disableGutters maxWidth="xl">
+          <Container style={{ overflow: 'hidden' }} disableGutters maxWidth={false}>
             <Navbar />
             <Main />
           </Container>

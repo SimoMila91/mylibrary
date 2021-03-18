@@ -3,7 +3,10 @@
 body {
   font-family: 'Raleway', sans-serif;
   background-color: #f1f2e9;
-  margin: 0;
+}
+
+.MuiDialogActions-root {
+  justify-content: center !important; 
 }
 
 *:focus {

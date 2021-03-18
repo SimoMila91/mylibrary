@@ -62,7 +62,7 @@ export default function SearchBar({ onFormSubmit }) {
     };
 
     return (
-        <div>
+        <div style={{ minHeight: 100 }}>
             <form onSubmit={onSubmit}>
                 <Paper className={classes.root}>
                     <IconButton className={classes.iconButton} aria-label='menu'>
