@@ -92,8 +92,8 @@ export default function BookFocus({ onClose, onOpen, id }) {
                                 <img className={classes.respImg} src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : `${ImageNotFound}`} alt="bookImage" />
                                 <div className={classes.mainInfo}>
                                     <ul style={{ display: 'grid' }}>
-                                        <li>{book.volumeInfo.authors !== undefined ? book.volumeInfo.authors.join(' - ') : "Author anavailable"}</li>
-                                        <li>{book.volumeInfo.publisher}</li>
+                                        <li>{book.volumeInfo.authors !== undefined ? book.volumeInfo.authors.join(' - ') : <em style={{ color: 'grey' }}>Author anavailable</em>}</li>
+                                        {book.volumeInfo.publisher ? <li> {book.volumeInfo.publisher} </li> : null}
                                         <li>{book.volumeInfo.publishedDate !== undefined ? book.volumeInfo.publishedDate.slice(0, 4) : "0000"}</li>
                                         <li>
                                             List price: {book.saleInfo.saleability === 'FOR_SALE' ?
@@ -120,19 +120,16 @@ export default function BookFocus({ onClose, onOpen, id }) {
                                 {book.volumeInfo.description ? <><Typography> {book.volumeInfo.description}</Typography></> : null}
                             </DialogContentText>
                             <DialogContentText>
-
-                            </DialogContentText>
-                            <DialogContentText>
                                 {book.accessInfo.epub.isAvailable || book.accessInfo.pdf.isAvailable ?
                                     <div>
                                         <ul style={{ display: 'grid' }}>
-                                            {book.accessInfo.epub.isAvailable ?
-                                                <li style={{ marginLeft: 0, color: 'green' }}>FREE EPUB:
+                                            {book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ?
+                                                <li style={{ marginLeft: 0, color: 'green', marginBottom: 0 }}>FREE EPUB:
                                                     <a style={{ textDecoration: 'none' }} href={book.accessInfo.epub.acsTokenLink}> Download</a>
                                                 </li>
                                                 : null}
-                                            {book.accessInfo.pdf.isAvailable ?
-                                                <li style={{ marginLeft: 0, color: 'green' }}>FREE PDF:
+                                            {book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ?
+                                                <li style={{ marginLeft: 0, color: 'green', marginBottom: 0 }}>FREE PDF:
                                                     <a style={{ textDecoration: 'none' }} href={book.accessInfo.pdf.acsTokenLink}> Download</a>
                                                 </li>
                                                 : null}

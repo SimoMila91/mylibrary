@@ -77,6 +77,10 @@ export default function Navbar() {
             setForm('Signup');
     };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     const renderForm = () => {
         if (selectedForm === 'Signup') {
             return (
@@ -85,7 +89,7 @@ export default function Navbar() {
                     <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
                         <DialogContentText>
                             Do you have an account?
-                            <a href="#" onClick={formChange}> Login</a>
+                            <a href="/#" onClick={formChange}> Login</a>
                         </DialogContentText>
                     </DialogContent>
                 </div>
@@ -97,16 +101,12 @@ export default function Navbar() {
                     <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
                         <DialogContentText>
                             Don't you have an account?
-                        <a href="#" onClick={formChange}> Signup</a>
+                        <a href="/#" onClick={formChange}> Signup</a>
                         </DialogContentText>
                     </DialogContent>
                 </div>
             )
         }
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     return (

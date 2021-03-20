@@ -97,7 +97,6 @@ export default function SearchBar({ onFormSubmit }) {
             >
                 <ModalFilters onClose={onClose} handleClose={handleClose} />
             </Dialog>
-
         </div>
     );
 };

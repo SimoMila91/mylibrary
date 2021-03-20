@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const Context = React.createContext();
 export const ContextProvider = props => {
 
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState(JSON.parse(localStorage.getItem('books')) !== null ? JSON.parse(localStorage.getItem('books')) : []);
     const [age, setAge] = useState('');
     const [type, setType] = useState('');
     const [genre, setGenre] = useState('fiction');
@@ -39,6 +39,10 @@ export const ContextProvider = props => {
         const { value } = e.target;
         setGenre(value);
     };
+
+    if (books.length > 0) {
+        localStorage.setItem('books', JSON.stringify(books));
+    }
 
     return (
         <Context.Provider
