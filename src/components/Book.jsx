@@ -16,13 +16,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Book() {
     const classes = useStyles();
-    const { type, age, books, setBooks } = useContext(Context);
+    const { type, age, books, setBooks, filterGenre, language } = useContext(Context);
 
-    let typeChange = type !== '' ? `&filter=${type}` : '';
+    let typeChange = type !== '' && filterGenre === '' ? `&filter=${type}` : '';
+
+
 
     const onTermSubmit = async (term) => {
-        const response = await googleBook.get(`/books/v1/volumes?q=${term}&printType=books&&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
-        setBooks(response.data.items);
+        const response = await googleBook.get(`/books/v1/volumes?q=${term}&langRestrict=${language}&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
+        if (response.data.items !== undefined)
+            setBooks(response.data.items);
+        else
+            console.log("non ci sono risultati");
     };
 
     const sortFunction = (a, b) => {

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import SearchIcon from '@material-ui/icons/Search';
 import TuneIcon from '@material-ui/icons/Tune';
 import { InputBase, Paper, IconButton, Divider, Dialog, Slide } from '@material-ui/core';
 import ModalFilters from './ModalFilters';
+import { Context } from '../context/Context';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +45,8 @@ export default function SearchBar({ onFormSubmit }) {
     const [term, setTerm] = useState('');
     const [modalState, setIsOpen] = useState(false);
 
+    const { filterGenre } = useContext(Context);
+
     const onSubmit = e => {
         e.preventDefault();
         if (term !== '')
@@ -58,7 +61,13 @@ export default function SearchBar({ onFormSubmit }) {
     const handleClose = e => {
         e.preventDefault();
         setIsOpen(false);
-        onFormSubmit(term);
+        if (filterGenre !== '') {
+            setTerm('');
+            onFormSubmit(filterGenre);
+        } else {
+            if (term !== '')
+                onFormSubmit(term);
+        }
     };
 
     return (

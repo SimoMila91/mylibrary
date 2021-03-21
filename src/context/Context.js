@@ -5,17 +5,23 @@ export const ContextProvider = props => {
 
     const [books, setBooks] = useState(JSON.parse(localStorage.getItem('books')) !== null ? JSON.parse(localStorage.getItem('books')) : []);
     const [age, setAge] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('paid-ebooks');
     const [genre, setGenre] = useState('fiction');
     const [snackOpen, setSnackOpen] = useState(false);
-    const [favorite, setFavorite] = useState(false);
+    const [filterGenre, setFilterGenre] = useState('');
+    const [language, setLanguage] = useState('it');
 
-    const favoriteBooks = (i, e) => {
-        e.preventDefault();
-        if (favorite && i)
-            setFavorite(false);
-        else if (!favorite && i)
-            setFavorite(true);
+    const handleFilterGenreChange = e => {
+        const { value } = e.target;
+        if (value !== '')
+            setFilterGenre(value);
+        else
+            setFilterGenre('');
+    };
+
+    const handleChangeLang = (e) => {
+        const { value } = e.target;
+        setLanguage(value);
     };
 
     const registered = () => {
@@ -32,7 +38,10 @@ export const ContextProvider = props => {
 
     const handleChangeType = (e) => {
         const { value } = e.target;
-        setType(value);
+        if (value !== '')
+            setType(value);
+        else
+            setType('paid-ebooks');
     };
 
     const handleGenreChange = (e) => {
@@ -40,8 +49,10 @@ export const ContextProvider = props => {
         setGenre(value);
     };
 
-    if (books.length > 0) {
+    if (books && books.length > 0) {
         localStorage.setItem('books', JSON.stringify(books));
+    } else {
+        console.log('non ci sono libri');
     }
 
     return (
@@ -59,10 +70,12 @@ export const ContextProvider = props => {
                 registered,
                 reSetSnackbar,
                 snackOpen,
-                favorite,
-                favoriteBooks,
                 books,
                 setBooks,
+                filterGenre,
+                handleFilterGenreChange,
+                language,
+                handleChangeLang
             }}
         >
             {props.children}

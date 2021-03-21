@@ -63,18 +63,14 @@ export default function Login({ handleClose }) {
     };
 
 
-    const ready = () => {
+    useEffect(() => {
         if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8)
             setControl(true);
         else
             setControl(false);
-    };
+    }, [email, psw,])
 
-    useEffect(() => {
-        ready();
-    }, [email, psw])
-
-    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true, helperText: 'At least 6 characters' };
+    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
     const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
     const buttonType = control === false ? { disabled: true } : { color: 'primary' };
 
@@ -92,7 +88,7 @@ export default function Login({ handleClose }) {
                                 className={classes.textFieldStyle}
                                 {...textField}
                                 margin="small"
-                                id="name"
+                                id="email"
                                 label="E-Mail"
                                 type="email"
                                 value={email}
@@ -114,7 +110,7 @@ export default function Login({ handleClose }) {
                                     className={classes.textFieldStyle}
                                     {...passwordControl}
                                     margin="small"
-                                    id="name"
+                                    id="psw"
                                     value={psw}
                                     onChange={e => setPsw(e.target.value)}
                                     type={showPassword ? 'text' : 'password'}

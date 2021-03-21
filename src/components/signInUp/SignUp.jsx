@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
     TextField, DialogActions, DialogContent, DialogTitle,
     makeStyles, Button, Grid, Input, InputAdornment,
-    IconButton, FormControl, InputLabel,
+    IconButton, FormControl, InputLabel, FormHelperText,
 } from '@material-ui/core';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
@@ -65,15 +65,11 @@ export default function Login({ handleClose }) {
             return false;
     };
 
-    const ready = () => {
+    useEffect(() => {
         if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8)
             setControl(true);
         else
             setControl(false);
-    };
-
-    useEffect(() => {
-        ready();
     }, [email, psw]);
 
     const signUp = e => {
@@ -83,7 +79,7 @@ export default function Login({ handleClose }) {
         registered();
     };
 
-    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true, helperText: 'At least 6 characters' };
+    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
     const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
     const buttonType = control === false ? { disabled: true } : { color: 'primary' };
 
@@ -92,7 +88,6 @@ export default function Login({ handleClose }) {
             <div className={classes.dialogStyle}>
                 <form action="post" onSubmit={signUp}>
                     <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
-
                     <DialogContent>
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
@@ -106,11 +101,9 @@ export default function Login({ handleClose }) {
                                     id="name"
                                     type="text"
                                     fullWidth
-                                    margin="small"
                                 />
                             </Grid>
                         </Grid>
-
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
                                 <MailOutlineIcon color="disabled" />
@@ -119,7 +112,6 @@ export default function Login({ handleClose }) {
                                 <TextField
                                     className={classes.textFieldStyle}
                                     {...textField}
-                                    margin="small"
                                     id="email"
                                     label="E-Mail"
                                     type="email"
@@ -141,8 +133,8 @@ export default function Login({ handleClose }) {
                                     <Input
                                         className={classes.textFieldStyle}
                                         {...passwordControl}
-                                        margin="small"
-                                        id="name"
+                                        aria-describedby="my-helper-text"
+                                        id="psw"
                                         value={psw}
                                         onChange={e => setPsw(e.target.value)}
                                         type={showPassword ? 'text' : 'password'}
@@ -157,6 +149,7 @@ export default function Login({ handleClose }) {
                                             </InputAdornment>
                                         }
                                     />
+                                    {psw.length >= 8 || psw === '' ? null : <FormHelperText id="my-helper-text">At least 8 characters</FormHelperText>}
                                 </FormControl>
 
                             </Grid>

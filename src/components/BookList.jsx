@@ -158,7 +158,6 @@ export default function BookList({ books }) {
                                     <Typography variant="h6" className={classes.titleSize, classes.textCenter}>
                                         {truncateString(book.volumeInfo.title, 80)}
                                     </Typography>
-
                                     <div className={classes.mobile}>
                                         <Typography variant="subtitle1" color="textSecondary" style={{ marginTop: 10, lineHeight: 'inherit' }}>
                                             <Typography variant="subtitle2" display="inline" color="textPrimary">Author: </Typography> {book.volumeInfo.authors !== undefined ? book.volumeInfo.authors.join(' - ') : "Author anavailable"}
