@@ -10,6 +10,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonIcon from '@material-ui/icons/Person';
 import { Context } from '../../context/Context';
+import axios from 'axios';
 
 const useStyle = makeStyles((theme) => ({
     dialogStyle: {
@@ -46,8 +47,7 @@ const useStyle = makeStyles((theme) => ({
             textDecoration: 'none',
         },
     },
-
-}))
+}));
 
 export default function Login({ handleClose }) {
     const classes = useStyle();
@@ -56,7 +56,7 @@ export default function Login({ handleClose }) {
     const [psw, setPsw] = useState('');
     const [control, setControl] = useState(false);
     const [showPassword, setVisibility] = useState(false);
-    const { registered } = useContext(Context);
+    const { snackOpenFun } = useContext(Context);
 
     const controlEmail = (email) => {
         if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) || email === '')
@@ -72,11 +72,20 @@ export default function Login({ handleClose }) {
             setControl(false);
     }, [email, psw]);
 
-    const signUp = e => {
+    const signup = e => {
         e.preventDefault();
-        console.log('REGISTRATO INFAME');
-        handleClose();
-        registered();
+        const payload = {
+            name,
+            email,
+            psw
+        };
+        axios.post("http://localhost:3000/signup", payload)
+            .then(res => {
+                snackOpenFun(res.data);
+                handleClose();
+            }).catch(err => {
+                snackOpenFun(err.response.data);
+            });
     };
 
     const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
@@ -86,7 +95,7 @@ export default function Login({ handleClose }) {
     return (
         <>
             <div className={classes.dialogStyle}>
-                <form action="post" onSubmit={signUp}>
+                <form action="post" onSubmit={signup}>
                     <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} alignItems="flex-end">

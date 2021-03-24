@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const Context = React.createContext();
 export const ContextProvider = props => {
@@ -8,8 +8,10 @@ export const ContextProvider = props => {
     const [type, setType] = useState('paid-ebooks');
     const [genre, setGenre] = useState('fiction');
     const [snackOpen, setSnackOpen] = useState(false);
+    const [message, setMessage] = useState('');
     const [filterGenre, setFilterGenre] = useState('');
     const [language, setLanguage] = useState('it');
+    const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token'));
 
     const handleFilterGenreChange = e => {
         const { value } = e.target;
@@ -24,8 +26,9 @@ export const ContextProvider = props => {
         setLanguage(value);
     };
 
-    const registered = () => {
+    const snackOpenFun = m => {
         setSnackOpen(true);
+        setMessage(m);
     };
 
     const reSetSnackbar = () => {
@@ -49,11 +52,21 @@ export const ContextProvider = props => {
         setGenre(value);
     };
 
-    if (books && books.length > 0) {
-        localStorage.setItem('books', JSON.stringify(books));
-    } else {
-        console.log('non ci sono libri');
-    }
+    const saveBooks = () => {
+        if (books && books.length > 0) {
+            localStorage.setItem('books', JSON.stringify(books));
+        } else {
+            console.log('non ci sono libri');
+        }
+    };
+    saveBooks();
+
+    const renderButton = () => {
+        if (loggedIn)
+            setLoggedIn(null);
+        else
+            setLoggedIn(true);
+    };
 
     return (
         <Context.Provider
@@ -67,7 +80,7 @@ export const ContextProvider = props => {
                 genre,
                 handleGenreChange,
                 setGenre,
-                registered,
+                snackOpenFun,
                 reSetSnackbar,
                 snackOpen,
                 books,
@@ -75,7 +88,10 @@ export const ContextProvider = props => {
                 filterGenre,
                 handleFilterGenreChange,
                 language,
-                handleChangeLang
+                handleChangeLang,
+                message,
+                loggedIn,
+                renderButton,
             }}
         >
             {props.children}

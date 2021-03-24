@@ -1,16 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
     Typography, Button, AppBar, Toolbar, IconButton, makeStyles,
-    Dialog, DialogContentText, DialogContent, Snackbar
+    Dialog, DialogContentText, DialogContent, Snackbar, Menu,
+    MenuItem
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '../App.css';
 import logoBook from '../images/logoBook.png';
 import NavbarContent from './NavbarContent';
 import Login from './signInUp/Login';
 import SignUp from './signInUp/SignUp';
 import { Context } from '../context/Context';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const font = "'Satisfy', cursive";
 
@@ -61,9 +63,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
     const classes = useStyles();
 
-    const { reSetSnackbar, snackOpen } = useContext(Context);
+    const { reSetSnackbar, snackOpen, message, loggedIn } = useContext(Context);
     const [open, setOpen] = useState(false);
     const [selectedForm, setForm] = useState('Signup');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openmenu = Boolean(anchorEl);
 
 
     const handleOpen = () => {
@@ -79,6 +83,14 @@ export default function Navbar() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleMenu = (e) => {
+        setAnchorEl(e.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(false);
     };
 
     const renderForm = () => {
@@ -120,29 +132,61 @@ export default function Navbar() {
                         My Library
                     </Typography>
                     <Typography className={classes.notVisible}></Typography>
-                    <Button className={classes.button} variant="outlined" onClick={handleOpen} color="inherit">SIGN IN / SIGN UP</Button>
-                    <Dialog
-                        justify="center"
-                        maxWidth="xl"
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="form-dialog-title"
-                    >
-                        <IconButton
-                            color="inherit"
-                            onClick={handleClose}
-                            justify="flex-end"
-                            className={classes.button}
-                        >
-                            <CloseIcon
-                                style={{
-                                    fontSize: '1.8rem',
-                                    color: 'grey',
+                    {loggedIn ?
+                        <>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="account-menu"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="account-menu"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
                                 }}
-                            />
-                        </IconButton>
-                        {renderForm()}
-                    </Dialog>
+                                keepMounted
+                                open={openmenu}
+                                onClose={handleMenuClose}
+                            >
+                                <MenuItem onClick={handleMenuClose}>My profile</MenuItem>
+                                <MenuItem onClick={handleMenuClose}><NavLink to="/logout" style={{ color: '#212529', textDecoration: 'none' }}>Logout</NavLink></MenuItem>
+                            </Menu>
+                        </> :
+                        <>
+                            <Button className={classes.button} variant="outlined" onClick={handleOpen} color="inherit">SIGN IN / SIGN UP</Button>
+                            <Dialog
+                                justify="center"
+                                maxWidth="xl"
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="form-dialog-title"
+                            >
+                                <IconButton
+                                    color="inherit"
+                                    onClick={handleClose}
+                                    justify="flex-end"
+                                    className={classes.button}
+                                >
+                                    <CloseIcon
+                                        style={{
+                                            fontSize: '1.8rem',
+                                            color: 'grey',
+                                        }}
+                                    />
+                                </IconButton>
+                                {renderForm()}
+                            </Dialog>
+                        </>
+
+
+                    }
+
+
                 </Toolbar>
             </AppBar>
             <NavbarContent />
@@ -154,7 +198,7 @@ export default function Navbar() {
                 open={snackOpen}
                 autoHideDuration={5000}
                 onClose={reSetSnackbar}
-                message={<span id="message-id">User registered successfully!</span>}
+                message={message}
             />
         </div>
 

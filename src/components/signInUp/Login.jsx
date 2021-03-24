@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     TextField, DialogActions, DialogContent, DialogTitle,
     makeStyles, Button, Grid, Input, InputAdornment,
@@ -9,6 +9,8 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { Context } from '../../context/Context';
+import axios from 'axios';
 
 const useStyle = makeStyles((theme) => ({
     dialogStyle: {
@@ -50,6 +52,7 @@ const useStyle = makeStyles((theme) => ({
 export default function Login({ handleClose }) {
     const classes = useStyle();
 
+    const { snackOpenFun, renderButton } = useContext(Context);
     const [email, setEmail] = useState('');
     const [psw, setPsw] = useState('');
     const [control, setControl] = useState(false);
@@ -68,7 +71,27 @@ export default function Login({ handleClose }) {
             setControl(true);
         else
             setControl(false);
-    }, [email, psw,])
+    }, [email, psw,]);
+
+    const login = e => {
+        e.preventDefault();
+        const payload = {
+            email,
+            psw
+        };
+        axios.post("http://localhost:3000/login", payload)
+            .then(res => {
+                const response = res.data;
+                snackOpenFun(response.string);
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('idUser', response.id);
+                renderButton();
+                handleClose();
+            }).catch(err => {
+                console.log(err);
+
+            });
+    }
 
     const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
     const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
@@ -77,69 +100,70 @@ export default function Login({ handleClose }) {
     return (
         <>
             <div className={classes.dialogStyle}>
-                <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Login on My Library</b></DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={1} alignItems="flex-end">
-                        <Grid item>
-                            <MailOutlineIcon color="disabled" />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                className={classes.textFieldStyle}
-                                {...textField}
-                                margin="small"
-                                id="email"
-                                label="E-Mail"
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                fullWidth
-                            />
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogContent style={{ overflow: 'hidden' }}>
-                    <Grid container spacing={1} alignItems="flex-end">
-                        <Grid item>
-                            <LockIcon color="disabled" />
-                        </Grid>
-                        <Grid item>
-                            <FormControl {...passwordControl} >
-                                <InputLabel>Password</InputLabel>
-                                <Input
+                <form onSubmit={login}>
+                    <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Login on My Library</b></DialogTitle>
+                    <DialogContent>
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <MailOutlineIcon color="disabled" />
+                            </Grid>
+                            <Grid item>
+                                <TextField
                                     className={classes.textFieldStyle}
-                                    {...passwordControl}
+                                    {...textField}
                                     margin="small"
-                                    id="psw"
-                                    value={psw}
-                                    onChange={e => setPsw(e.target.value)}
-                                    type={showPassword ? 'text' : 'password'}
+                                    id="email"
+                                    label="E-Mail"
+                                    type="email"
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
                                     fullWidth
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={e => showPassword ? setVisibility(false) : setVisibility(true)}
-                                            >
-                                                {showPassword ? <Visibility /> : <VisibilityOff color="disabled" />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
                                 />
-                            </FormControl>
-
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogContent style={{ textAlign: 'end' }}>
-                    <p className={classes.forgotPsw}><NavLink to="/" onClick={handleClose} className={classes.linkStyle}>Do you forgot your password?</NavLink></p>
+                    </DialogContent>
+                    <DialogContent style={{ overflow: 'hidden' }}>
+                        <Grid container spacing={1} alignItems="flex-end">
+                            <Grid item>
+                                <LockIcon color="disabled" />
+                            </Grid>
+                            <Grid item>
+                                <FormControl {...passwordControl} >
+                                    <InputLabel>Password</InputLabel>
+                                    <Input
+                                        className={classes.textFieldStyle}
+                                        {...passwordControl}
+                                        margin="small"
+                                        id="psw"
+                                        value={psw}
+                                        onChange={e => setPsw(e.target.value)}
+                                        type={showPassword ? 'text' : 'password'}
+                                        fullWidth
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={e => showPassword ? setVisibility(false) : setVisibility(true)}
+                                                >
+                                                    {showPassword ? <Visibility /> : <VisibilityOff color="disabled" />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                    />
+                                </FormControl>
 
-                </DialogContent>
-                <DialogActions className={classes.buttonSyle}>
-                    <Button style={{ borderRadius: 50 }} size="medium" variant="contained" {...buttonType}>
-                        Login with your email
-                </Button>
-                </DialogActions>
+                            </Grid>
+                        </Grid>
+                    </DialogContent>
+                    <DialogContent style={{ textAlign: 'end' }}>
+                        <p className={classes.forgotPsw}><NavLink to="/" onClick={handleClose} className={classes.linkStyle}>Do you forgot your password?</NavLink></p>
 
+                    </DialogContent>
+                    <DialogActions className={classes.buttonSyle}>
+                        <Button style={{ borderRadius: 50 }} type="submit" size="medium" variant="contained" {...buttonType}>
+                            Login with your email
+                    </Button>
+                    </DialogActions>
+                </form>
             </div>
 
         </>

@@ -16,6 +16,7 @@ const theme = createMuiTheme({
   }
 });
 
+
 const Index = () => (
   <ThemeProvider theme={theme}>
     <App />

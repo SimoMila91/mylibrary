@@ -21,12 +21,11 @@ export default function Book() {
     let typeChange = type !== '' && filterGenre === '' ? `&filter=${type}` : '';
 
 
-
     const onTermSubmit = async (term) => {
         const response = await googleBook.get(`/books/v1/volumes?q=${term}&langRestrict=${language}&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
-        if (response.data.items !== undefined)
+        if (response.data.items !== undefined) {
             setBooks(response.data.items);
-        else
+        } else
             console.log("non ci sono risultati");
     };
 
