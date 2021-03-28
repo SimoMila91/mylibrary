@@ -93,7 +93,7 @@ export default function HomeProgress({ news }) {
                                 navButtonsAlwaysVisible={false}
                                 navButtonsAlwaysInvisible={false}
                             >
-                                {news.map((news, id) => (
+                                { news !== undefined ? news.map((news, id) => (
                                     <Paper
                                         className={classes.project}
                                         key={id}
@@ -108,7 +108,7 @@ export default function HomeProgress({ news }) {
                                             Check it out!
                                     </Button>
                                     </Paper>
-                                ))}
+                                )) : null}
                             </Carousel>
                         </Grid>
                         <Grid item>

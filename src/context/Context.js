@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export const Context = React.createContext();
 export const ContextProvider = props => {
@@ -7,8 +7,13 @@ export const ContextProvider = props => {
     const [age, setAge] = useState('');
     const [type, setType] = useState('paid-ebooks');
     const [genre, setGenre] = useState('fiction');
-    const [snackOpen, setSnackOpen] = useState(false);
-    const [message, setMessage] = useState('');
+    const [open, setOpen] = useState(false);
+    const initialState = {
+        open: false,
+        message: '',
+        type: '',
+    };
+    const [snackOpen, setSnackOpen] = useState(initialState);
     const [filterGenre, setFilterGenre] = useState('');
     const [language, setLanguage] = useState('it');
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token'));
@@ -21,18 +26,29 @@ export const ContextProvider = props => {
             setFilterGenre('');
     };
 
+    const handleOpenForm = () => {
+        setOpen(true);
+    };
+
+    const handleCloseForm = () => {
+        setOpen(false);
+    };
+
     const handleChangeLang = (e) => {
         const { value } = e.target;
         setLanguage(value);
     };
 
-    const snackOpenFun = m => {
-        setSnackOpen(true);
-        setMessage(m);
+    const snackOpenFun = (m, t) => {
+        setSnackOpen({
+            open: true, 
+            message: m,
+            type: t,
+        });
     };
 
     const reSetSnackbar = () => {
-        setSnackOpen(false);
+        setSnackOpen(initialState);
     };
 
     const handleChangeAge = (age) => {
@@ -55,11 +71,11 @@ export const ContextProvider = props => {
     const saveBooks = () => {
         if (books && books.length > 0) {
             localStorage.setItem('books', JSON.stringify(books));
-        } else {
-            console.log('non ci sono libri');
-        }
+        } 
     };
+
     saveBooks();
+
 
     const renderButton = () => {
         if (loggedIn)
@@ -89,9 +105,11 @@ export const ContextProvider = props => {
                 handleFilterGenreChange,
                 language,
                 handleChangeLang,
-                message,
                 loggedIn,
                 renderButton,
+                handleOpenForm,
+                open,
+                handleCloseForm,
             }}
         >
             {props.children}

@@ -77,12 +77,10 @@ export default function BookFocus({ onClose, onOpen, id }) {
                         fullWidth={true}
                         open={onOpen}
                     >
-                        <DialogTitle>
-                            <Typography className={classes.titleMobile} variant="h4">
-                                {book.volumeInfo.title}
-                            </Typography>
-
-
+                        <DialogTitle disableTypography>
+                                <Typography className={classes.titleMobile} variant="h4">
+                                    {book.volumeInfo.title}
+                                </Typography>
                             <IconButton className={classes.closeButton} aria-label="close" onClick={onClose}>
                                 <CloseIcon />
                             </IconButton>
@@ -116,25 +114,31 @@ export default function BookFocus({ onClose, onOpen, id }) {
                                     </ul>
                                 </div>
                             </div>
-                            <DialogContentText>
+                            <div>
                                 {book.volumeInfo.description ? <><Typography style={{ lineHeight: 2 }}> {book.volumeInfo.description}</Typography></> : null}
-                            </DialogContentText>
-                            {book.accessInfo.epub.isAvailable || book.accessInfo.pdf.isAvailable ?
+                            </div>
+                            <div>
+                            {
+                                book.accessInfo.epub.isAvailable || book.accessInfo.pdf.isAvailable ?
                                 <div>
                                     <ul style={{ display: 'grid' }}>
-                                        {book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ?
+                                        {
+                                            book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ?
                                             <li style={{ marginLeft: 0, color: 'green', marginBottom: 0 }}>FREE EPUB:
-                                                    <a style={{ textDecoration: 'none' }} href={book.accessInfo.epub.acsTokenLink}> Download</a>
-                                            </li>
-                                            : null}
-                                        {book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ?
+                                                <a style={{ textDecoration: 'none' }} href={book.accessInfo.epub.acsTokenLink}> Download</a>
+                                            </li> : null
+                                        }
+                                        {
+                                            book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ?
                                             <li style={{ marginLeft: 0, color: 'green', marginBottom: 0 }}>FREE PDF:
-                                                    <a style={{ textDecoration: 'none' }} href={book.accessInfo.pdf.acsTokenLink}> Download</a>
+                                                <a style={{ textDecoration: 'none' }} href={book.accessInfo.pdf.acsTokenLink}> Download</a>
                                             </li>
-                                            : null}
+                                            : null
+                                        }
                                     </ul>
-                                </div>
-                                : null}
+                                </div> : null
+                            }
+                            </div>
                         </DialogContent>
                         <DialogActions>
                             {book.saleInfo.saleability === 'FOR_SALE' ?

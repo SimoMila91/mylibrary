@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
     TextField, DialogActions, DialogContent, DialogTitle,
     makeStyles, Button, Grid, Input, InputAdornment,
-    IconButton, FormControl, InputLabel, FormHelperText,
+    IconButton, FormControl, InputLabel
 } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import PersonIcon from '@material-ui/icons/Person';
 import { Context } from '../../context/Context';
 import axios from 'axios';
 
@@ -34,7 +34,7 @@ const useStyle = makeStyles((theme) => ({
     },
     buttonStyle: {
         justifyContent: 'center',
-        paddingTop: 50,
+        paddingTop: 10,
     },
     forgotPsw: {
         fontSize: 13,
@@ -46,17 +46,17 @@ const useStyle = makeStyles((theme) => ({
             color: 'black',
             textDecoration: 'none',
         },
-    },
-}));
+    }
+}))
 
 export default function Login({ handleClose }) {
     const classes = useStyle();
-    const [name, setName] = useState('');
+
+    const { snackOpenFun, renderButton } = useContext(Context);
     const [email, setEmail] = useState('');
     const [psw, setPsw] = useState('');
     const [control, setControl] = useState(false);
     const [showPassword, setVisibility] = useState(false);
-    const { snackOpenFun } = useContext(Context);
 
     const controlEmail = (email) => {
         if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) || email === '')
@@ -65,28 +65,32 @@ export default function Login({ handleClose }) {
             return false;
     };
 
+
     useEffect(() => {
         if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8)
             setControl(true);
         else
             setControl(false);
-    }, [email, psw]);
+    }, [email, psw,]);
 
-    const signup = e => {
+    const login = e => {
         e.preventDefault();
         const payload = {
-            name,
             email,
             psw
         };
-        axios.post("http://localhost:3000/signup", payload)
+        axios.post("http://localhost:3000/login", payload)
             .then(res => {
-                snackOpenFun(res.data);
+                const response = res.data;
+                snackOpenFun(response.string, 'success');
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('idUser', response.id);
+                renderButton();
                 handleClose();
             }).catch(err => {
-                snackOpenFun(err.response.data);
+                snackOpenFun(err.response.data, 'info');
             });
-    };
+    }
 
     const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
     const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
@@ -95,25 +99,10 @@ export default function Login({ handleClose }) {
     return (
         <>
             <div className={classes.dialogStyle}>
-                <form action="post" onSubmit={signup}>
-                    <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
+                <form onSubmit={login}>
+                    <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Login on My Library</b></DialogTitle>
                     <DialogContent>
-                        <Grid container spacing={2} alignItems="flex-end">
-                            <Grid item>
-                                <PersonIcon color="disabled" />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    className={classes.textFieldStyle}
-                                    label="Name"
-                                    onChange={e => setName(e.target.value)}
-                                    id="name"
-                                    type="text"
-                                    fullWidth
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2} alignItems="flex-end">
+                        <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
                                 <MailOutlineIcon color="disabled" />
                             </Grid>
@@ -132,17 +121,16 @@ export default function Login({ handleClose }) {
                         </Grid>
                     </DialogContent>
                     <DialogContent style={{ overflow: 'hidden' }}>
-                        <Grid container spacing={2} alignItems="flex-end">
+                        <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
                                 <LockIcon color="disabled" />
                             </Grid>
-                            <Grid item style={{ paddingTop: 0 }}>
-                                <FormControl {...passwordControl}>
+                            <Grid item>
+                                <FormControl {...passwordControl} >
                                     <InputLabel>Password</InputLabel>
                                     <Input
                                         className={classes.textFieldStyle}
                                         {...passwordControl}
-                                        aria-describedby="my-helper-text"
                                         id="psw"
                                         value={psw}
                                         onChange={e => setPsw(e.target.value)}
@@ -158,19 +146,23 @@ export default function Login({ handleClose }) {
                                             </InputAdornment>
                                         }
                                     />
-                                    {psw.length >= 8 || psw === '' ? null : <FormHelperText id="my-helper-text">At least 8 characters</FormHelperText>}
                                 </FormControl>
 
                             </Grid>
                         </Grid>
                     </DialogContent>
-                    <DialogActions className={classes.buttonStyle}>
-                        <Button type="submit" style={{ borderRadius: 50 }} size="medium" variant="contained" {...buttonType}>
-                            Signup with your email
-                        </Button>
+                    <DialogContent style={{ textAlign: 'end' }}>
+                        <p className={classes.forgotPsw}><NavLink to="/" onClick={handleClose} className={classes.linkStyle}>Do you forgot your password?</NavLink></p>
+
+                    </DialogContent>
+                    <DialogActions className={classes.buttonSyle}>
+                        <Button style={{ borderRadius: 50 }} type="submit" size="medium" variant="contained" {...buttonType}>
+                            Login with your email
+                    </Button>
                     </DialogActions>
                 </form>
             </div>
+
         </>
     )
 }

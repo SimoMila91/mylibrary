@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
+import axios from 'axios';
 
 const theme = createMuiTheme({
   typography: {
@@ -16,6 +17,21 @@ const theme = createMuiTheme({
   }
 });
 
+axios.interceptors.request.use(config => {
+  console.log('eseguo request interceptor');
+  const token = localStorage.getItem('token');
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+axios.interceptors.response.use(response => {
+  return response;
+}, error => {
+  if (error.response.status === 401) {
+    localStorage.clear();
+  }
+  throw error;
+});
 
 const Index = () => (
   <ThemeProvider theme={theme}>

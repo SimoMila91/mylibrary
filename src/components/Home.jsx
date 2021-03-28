@@ -2,10 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import googleBook from '../api/googleBook';
 import HomeProgress from './home/HomeProgress';
-import {
-    CircularProgress, Paper, Grid, Container,
-    Card, Typography, CardMedia
-} from '@material-ui/core';
+import { Paper, Grid, Container, Card, Typography, CardMedia} from '@material-ui/core';
 import { Context } from '../context/Context';
 import harryPotter from '../images/harryPotter.jpg';
 
@@ -15,11 +12,6 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
         color: '#494949',
         marginTop: '4%',
-    },
-    position: {
-        display: 'flex',
-        margin: 'auto',
-        marginTop: 100,
     },
     article: {
         padding: 10,
@@ -48,12 +40,14 @@ export default function Home() {
             .catch(err => console.warn(err));
     };
 
-    useEffect(() => {
+    useEffect((genre) => {
         termSort(genre);
-    }, []);
+        // eslint-disable-line react-hooks/exhaustive-deps
+    }, [genre]);
 
     useEffect(() => {
         termSort(genre);
+        // eslint-disable-line react-hooks/exhaustive-deps
     }, [genre])
 
     return (
@@ -87,7 +81,7 @@ export default function Home() {
                 </Grid>
             </Container>
             <div className={classes.root}>
-                {news.length === 0 || news === undefined ? <CircularProgress disableShrink className={classes.position} /> : <HomeProgress news={news} />}
+                 <HomeProgress news={news} />
             </div>
         </>
     )

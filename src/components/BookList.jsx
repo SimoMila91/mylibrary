@@ -8,9 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Context } from '../context/Context';
 import BookFocus from './book/BookFocus';
+import {insertBook} from './usersComponent/InsertBook';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const useStyles = makeStyles((theme) => ({
-
     root: {
         [theme.breakpoints.down('xs')]: {
             flexFlow: 'column',
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
         maxHeight: 200,
         [theme.breakpoints.down('xs')]: {
             margin: 'auto',
+            marginTop: 10,
         },
     },
     textCenter: {
@@ -44,11 +46,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('xs')]: {
             fontSize: 18,
         },
-        [theme.breakpoints.up('sm')]: {
-            maxWidth: 400,
-        },
-
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('lg')]: {
             fontSize: 19,
         },
     },
@@ -67,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             top: -200,
         },
+        display: 'flex',
+        flexFlow: 'column',
     },
     mobile: {
         textAlign: 'center',
@@ -87,8 +87,8 @@ export default function BookList({ books }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const isMenuOpen = Boolean(anchorEl);
     const [id, setId] = useState(0);
-
     const [openDetails, setOpenDetails] = useState(false);
+    const { handleOpenForm, loggedIn, snackOpenFun } = useContext(Context);
 
     const handleOpenDetails = (id) => {
         setOpenDetails(true);
@@ -100,16 +100,38 @@ export default function BookList({ books }) {
         setOpenDetails(false);
     };
 
-    const handleProfileMenuOpen = (event) => {
+    const handleProfileMenuOpen = (event, i) => {
+        setId(i);
         setAnchorEl(event.currentTarget);
     };
 
-    const handleMenuClose = () => {
+    const handleMenuClose = (e) => {
+        if (loggedIn) {
+            const book = books[id];
+            console.log(book);
+            const payload = {
+                idBook: book.id,
+                title: book.volumeInfo.title,
+                author: book.volumeInfo.authors ? book.volumeInfo.authors : null,
+                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "&#39;") : null,
+                linkImage: book.volumeInfo.imageLinks.thumbnail ? book.volumeInfo.imageLinks.thumbnail : null,
+                linkBuy: book.saleInfo.saleability === 'FOR_SALE' ? book.saleInfo.buyLink : null,
+                linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ? book.accessInfo.pdf.acsTokenLink : null,
+                linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ? book.accessInfo.epub.acsTokenLink : null,
+                linkPreview: book.volumeInfo.previewLink,
+                genre: book.volumeInfo.categories,
+                publish_date: book.volumeInfo.publishedDate !== undefined ? book.volumeInfo.publishedDate.slice(0, 4) : '0000',
+                type: e.currentTarget.textContent.slice(2),
+                idUser: localStorage.getItem('idUser'),
+            };
+            insertBook(payload, snackOpenFun);
+        } else {
+            handleOpenForm();
+            snackOpenFun('You need to login first', 'info');
+        }
         setAnchorEl(null);
     };
 
-    const { favorite } = useContext(Context);
-    const colorClicked = favorite ? { color: 'yellow' } : { color: '' };
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -120,11 +142,10 @@ export default function BookList({ books }) {
             keepMounted
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={isMenuOpen}
-            onClose={handleMenuClose}
+            onClose={() => setAnchorEl(null)}
         >
-            <MenuItem onClick={handleMenuClose}>Add as read</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Add to read</MenuItem>
-            <MenuItem onClick={handleMenuClose}>Add to favorites</MenuItem>
+            <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
+            <MenuItem onClick={handleMenuClose}>+ To read</MenuItem>
         </Menu>
     );
 
@@ -132,9 +153,10 @@ export default function BookList({ books }) {
         <React.Fragment>
             <Grid container spacing={4}>
                 {books.map((book, i) => (
-                    <Grid style={{ display: 'flex' }} key={i} item xs={12} md={6} xl={4}>
+                    <Grid style={{ display: 'flex' }} key={i} item xs={12} md={12} lg={6} xl={4}>
                         <Card className={classes.root} >
-                            <img className={classes.cover}
+                            <img 
+                                className={classes.cover}
                                 src={book.volumeInfo.imageLinks === undefined ? `${notFoundImage}`
                                     : `${book.volumeInfo.imageLinks.thumbnail}`}
                                 alt={book.volumeInfo.title}
@@ -143,19 +165,20 @@ export default function BookList({ books }) {
                                 <CardContent>
                                     <div className={classes.iconStar}>
                                         <IconButton
-                                            style={{ ...colorClicked }}
                                             edge="end"
-                                            aria-label="account of current user"
+                                            aria-label="add book"
                                             aria-controls={menuId}
                                             aria-haspopup="true"
-                                            onClick={handleProfileMenuOpen}
+                                            onClick={(e) => handleProfileMenuOpen(e, i)}
                                             color="inherit"
                                         >
                                             <MoreVertIcon />
                                         </IconButton>
-
+                                        <IconButton edge="end" onClick={(e) => console.log(e.target.getAttribute("value"))}>
+                                            <FavoriteBorderIcon value="1" />
+                                        </IconButton>
                                     </div>
-                                    <Typography variant="h6" className={classes.titleSize, classes.textCenter}>
+                                    <Typography variant="h6" className={classes.titleSize + ` ` + classes.textCenter}>
                                         {truncateString(book.volumeInfo.title, 80)}
                                     </Typography>
                                     <div className={classes.mobile}>
@@ -173,9 +196,7 @@ export default function BookList({ books }) {
                                 <div className={classes.buttons}>
                                     <Button onClick={() => handleOpenDetails(i)} color="primary" size="small" variant="outlined">check more</Button>
                                 </div>
-
                             </div>
-
                         </Card>
                     </Grid>
                 ))}

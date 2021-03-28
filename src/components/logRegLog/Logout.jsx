@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { Context } from '../../context/Context';
 
 export default function Logout() {
-    const { renderButton } = useContext(Context);
+    const { renderButton, setBooks } = useContext(Context);
     const token = localStorage.getItem('token');
 
     const payload = {
@@ -15,6 +15,7 @@ export default function Logout() {
         .then(res => {
             console.log(res.data);
             localStorage.clear();
+            setBooks([]);
             renderButton();
         }).catch(err => {
             console.warn(err);

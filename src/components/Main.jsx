@@ -2,7 +2,9 @@ import { Route, Switch } from 'react-router-dom';
 import React from 'react';
 import Book from './Book';
 import Home from './Home';
-import Logout from './signInUp/Logout';
+import Logout from './logRegLog/Logout';
+import SignUp from './logRegLog/SignUp';
+import Login from './logRegLog/Login';
 
 
 export default function Main() {
@@ -11,6 +13,8 @@ export default function Main() {
             <Route path="/" exact component={Home} />
             <Route path="/search" component={Book} />
             <Route path="/logout" component={Logout} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/login" component={Login} />
         </Switch>
     )
 

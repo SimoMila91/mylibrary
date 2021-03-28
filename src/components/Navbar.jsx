@@ -1,18 +1,19 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     Typography, Button, AppBar, Toolbar, IconButton, makeStyles,
     Dialog, DialogContentText, DialogContent, Snackbar, Menu,
-    MenuItem
+    MenuItem, Link
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import '../App.css';
 import logoBook from '../images/logoBook.png';
 import NavbarContent from './NavbarContent';
-import Login from './signInUp/Login';
-import SignUp from './signInUp/SignUp';
+import Login from './logRegLog/Login';
+import SignUp from './logRegLog/SignUp';
 import { Context } from '../context/Context';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import { Alert } from '@material-ui/lab';
 
 const font = "'Satisfy', cursive";
 
@@ -63,26 +64,17 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
     const classes = useStyles();
 
-    const { reSetSnackbar, snackOpen, message, loggedIn } = useContext(Context);
-    const [open, setOpen] = useState(false);
-    const [selectedForm, setForm] = useState('Signup');
+    const { reSetSnackbar, snackOpen, loggedIn, handleOpenForm, open, handleCloseForm } = useContext(Context);
+    const [selectedForm, setForm] = useState('Login');
     const [anchorEl, setAnchorEl] = useState(null);
     const openmenu = Boolean(anchorEl);
 
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const formChange = () => {
+    const formChange = (e) => {
+        e.preventDefault();
         if (selectedForm === 'Signup')
             setForm('Login');
         else
             setForm('Signup');
-    };
-
-    const handleClose = () => {
-        setOpen(false);
     };
 
     const handleMenu = (e) => {
@@ -97,11 +89,11 @@ export default function Navbar() {
         if (selectedForm === 'Signup') {
             return (
                 <div>
-                    <SignUp handleClose={handleClose} className={classes.formStyle} />
+                    <SignUp handleClose={handleCloseForm} className={classes.formStyle} />
                     <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
                         <DialogContentText>
                             Do you have an account?
-                            <a href="#" onClick={formChange}> Login</a>
+                            <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Login</Link>
                         </DialogContentText>
                     </DialogContent>
                 </div>
@@ -109,11 +101,11 @@ export default function Navbar() {
         } else {
             return (
                 <div>
-                    <Login handleClose={handleClose} />
+                    <Login handleClose={handleCloseForm} />
                     <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
                         <DialogContentText>
                             Don't you have an account?
-                        <a href="#" onClick={formChange}> Signup</a>
+                        <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Signup</Link>
                         </DialogContentText>
                     </DialogContent>
                 </div>
@@ -125,14 +117,15 @@ export default function Navbar() {
         <div className={classes.root}>
             <AppBar className={classes.style} position="static">
                 <Toolbar className={classes.customizeToolbar} >
-                    <IconButton component={Link} to="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                    <IconButton component={NavLink} to="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <img className={classes.logoStyle} src={`${logoBook}`} alt="logo" />
                     </IconButton>
                     <Typography variant="h4" className={classes.title}>
                         My Library
                     </Typography>
                     <Typography className={classes.notVisible}></Typography>
-                    {loggedIn ?
+                    {
+                        loggedIn ?
                         <>
                             <IconButton
                                 aria-label="account of current user"
@@ -156,19 +149,20 @@ export default function Navbar() {
                                 <MenuItem onClick={handleMenuClose}>My profile</MenuItem>
                                 <MenuItem onClick={handleMenuClose}><NavLink to="/logout" style={{ color: '#212529', textDecoration: 'none' }}>Logout</NavLink></MenuItem>
                             </Menu>
-                        </> :
+                        </>
+                        :
                         <>
-                            <Button className={classes.button} variant="outlined" onClick={handleOpen} color="inherit">SIGN IN / SIGN UP</Button>
+                            <Button className={classes.button} variant="outlined" onClick={handleOpenForm} color="inherit">SIGN IN / SIGN UP</Button>
                             <Dialog
                                 justify="center"
                                 maxWidth="xl"
                                 open={open}
-                                onClose={handleClose}
+                                onClose={handleCloseForm}
                                 aria-labelledby="form-dialog-title"
                             >
                                 <IconButton
                                     color="inherit"
-                                    onClick={handleClose}
+                                    onClick={handleCloseForm}
                                     justify="flex-end"
                                     className={classes.button}
                                 >
@@ -182,11 +176,7 @@ export default function Navbar() {
                                 {renderForm()}
                             </Dialog>
                         </>
-
-
                     }
-
-
                 </Toolbar>
             </AppBar>
             <NavbarContent />
@@ -198,9 +188,9 @@ export default function Navbar() {
                 open={snackOpen}
                 autoHideDuration={5000}
                 onClose={reSetSnackbar}
-                message={message}
-            />
+            >
+                <Alert severity={snackOpen.type}>{snackOpen.message}</Alert>
+            </Snackbar>
         </div>
-
     );
 };
