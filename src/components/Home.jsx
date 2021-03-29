@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import googleBook from '../api/googleBook';
 import HomeProgress from './home/HomeProgress';
-import { Paper, Grid, Container, Card, Typography, CardMedia} from '@material-ui/core';
+import { Paper, Grid, Container, Typography, Button, Divider} from '@material-ui/core';
 import { Context } from '../context/Context';
-import harryPotter from '../images/harryPotter.jpg';
+import { NewsContext } from '../context/NewsContext';
+import NewsArticle from './home/NewsArticles';
+import { NavLink } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -12,11 +14,6 @@ const useStyles = makeStyles((theme) => ({
         width: 'auto',
         color: '#494949',
         marginTop: '4%',
-    },
-    article: {
-        padding: 10,
-        textAlign: 'center',
-        lineHeight: 1.8,
     },
     title: {
         [theme.breakpoints.up('xs')]: {
@@ -27,9 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Home() {
+export default function Home(props) {
     const classes = useStyles();
     const { genre } = useContext(Context);
+    const { article } = useContext(NewsContext);
     const [news, setNews] = useState([]);
 
     const termSort = (term) => {
@@ -50,36 +48,25 @@ export default function Home() {
         // eslint-disable-line react-hooks/exhaustive-deps
     }, [genre])
 
+    console.log(article);
     return (
         <>
-            <Container style={{ paddingTop: '4%' }} maxWidth="lg">
+            <Container style={{ paddingTop: '4%', textAlign: 'center' }} maxWidth="lg">
                 <Paper style={{ marginBottom: '2%', }} >
                     <Typography className={classes.title}>News and Reviews from the World of Books!</Typography>
                 </Paper>
                 <Grid container spacing={2}>
-                    {[0, 1, 2].map((value) => (
-                        <Grid key={value} item xs={12} sm={6} md={4}>
-                            <Grid item>
-                                <Paper className={classes.article} elevation={6}>
-                                    <Typography style={{ marginTop: 10 }} variant="h5">Harry Potter is a Bestseller</Typography>
-                                    <br />
-                                    <Card>
-                                        <CardMedia style={{ height: 0, paddingTop: '66%' }} image={harryPotter} />
-                                    </Card>
-
-                                    <p style={{ marginTop: '3%', textAlign: 'left', padding: 12 }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint commodi reprehenderit dolor totam
-                                    ipsam possimus iusto quaerat ratione, doloribus
-                                    nesciunt corporis quos tempore eum molestias explicabo repudiandae aperiam quae consectetur.
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint commodi reprehenderit dolor totam
-                                    ipsam possimus iusto quaerat ratione, doloribus.
-                                        <br /><span style={{ fontSize: 20 }}>...more</span></p>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    ))}
-
+                    {
+                        article ? article.articles.slice(0, 6).map((news) => <NewsArticle news={news} /> )
+                        : 
+                        <p>Loading</p>                   
+                    }
                 </Grid>
+                <Button style={{margin: '3% 0'}} variant="contained" color="inherit">
+                    <NavLink to="/article" style={{textDecoration: 'none'}}>check more articles</NavLink>
+                </Button>
             </Container>
+            <Divider />
             <div className={classes.root}>
                  <HomeProgress news={news} />
             </div>

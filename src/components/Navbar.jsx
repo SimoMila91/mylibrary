@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {
     Typography, Button, AppBar, Toolbar, IconButton, makeStyles,
-    Dialog, DialogContentText, DialogContent, Snackbar, Menu,
+    Dialog, DialogContentText, DialogContent, Menu,
     MenuItem, Link
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,7 +13,7 @@ import Login from './logRegLog/Login';
 import SignUp from './logRegLog/SignUp';
 import { Context } from '../context/Context';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { Alert } from '@material-ui/lab';
+
 
 const font = "'Satisfy', cursive";
 
@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
     const classes = useStyles();
 
-    const { reSetSnackbar, snackOpen, loggedIn, handleOpenForm, open, handleCloseForm } = useContext(Context);
+    const { loggedIn, handleOpenForm, open, handleCloseForm } = useContext(Context);
     const [selectedForm, setForm] = useState('Login');
     const [anchorEl, setAnchorEl] = useState(null);
     const openmenu = Boolean(anchorEl);
@@ -152,7 +152,7 @@ export default function Navbar() {
                         </>
                         :
                         <>
-                            <Button className={classes.button} variant="outlined" onClick={handleOpenForm} color="inherit">SIGN IN / SIGN UP</Button>
+                            <Button className={classes.button} variant="contained" onClick={handleOpenForm} color="inherit">SIGN IN / SIGN UP</Button>
                             <Dialog
                                 justify="center"
                                 maxWidth="xl"
@@ -180,17 +180,6 @@ export default function Navbar() {
                 </Toolbar>
             </AppBar>
             <NavbarContent />
-            <Snackbar
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                open={snackOpen}
-                autoHideDuration={5000}
-                onClose={reSetSnackbar}
-            >
-                <Alert severity={snackOpen.type}>{snackOpen.message}</Alert>
-            </Snackbar>
         </div>
     );
 };

@@ -41,8 +41,8 @@ export default function NavbarContent() {
                     <ul>
                         <li><NavLink to="/" style={{ color: '#212529', textDecoration: 'none' }}>HOME</NavLink></li>
                         <li><NavLink to="/search" style={{ color: '#212529', textDecoration: 'none' }}>SEARCH</NavLink></li>
-                        <li>FORUM</li>
-                        <li>CHAT</li>
+                        <li>ARTICLES</li>
+                        <li>FAQ</li>
                     </ul>
                 </div>
             </div>

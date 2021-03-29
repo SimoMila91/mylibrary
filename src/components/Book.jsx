@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import googleBook from '../api/googleBook';
 import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
-import BookList from './BookList';
+import BookList from './book/BookList';
 import { Context } from '../context/Context';
 
 

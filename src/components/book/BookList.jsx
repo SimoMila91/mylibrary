@@ -1,15 +1,17 @@
 import React, { useState, useContext } from 'react';
-import notFoundImage from '../images/imageNotFound.svg';
+import notFoundImage from '../../images/imageNotFound.svg';
 import {
     Grid, Card, Typography, CardContent, Button,
     Menu, MenuItem, IconButton
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Context } from '../context/Context';
-import BookFocus from './book/BookFocus';
-import {insertBook} from './usersComponent/InsertBook';
+import { Context } from '../../context/Context';
+import BookFocus from './BookFocus';
+import insertBook from '../usersRoutes/InsertBook';
+import favoriteBook from '../usersRoutes/FavoriteBook';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,10 +87,10 @@ const truncateString = (str, n) => {
 export default function BookList({ books }) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const isMenuOpen = Boolean(anchorEl);
     const [id, setId] = useState(0);
     const [openDetails, setOpenDetails] = useState(false);
     const { handleOpenForm, loggedIn, snackOpenFun } = useContext(Context);
+    const isMenuOpen = Boolean(anchorEl);
 
     const handleOpenDetails = (id) => {
         setOpenDetails(true);
@@ -130,6 +132,35 @@ export default function BookList({ books }) {
             snackOpenFun('You need to login first', 'info');
         }
         setAnchorEl(null);
+    };
+
+    const favoriteCall = (e, i) => {
+        setId(i);
+        if (loggedIn) {
+            const value = e.target.getAttribute("value");
+            const book = books[id];
+            console.log(book);
+            const payload = {
+                idBook: book.id,
+                title: book.volumeInfo.title,
+                author: book.volumeInfo.authors ? book.volumeInfo.authors : null,
+                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "&#39;") : null,
+                linkImage: book.volumeInfo.imageLinks.thumbnail ? book.volumeInfo.imageLinks.thumbnail : null,
+                linkBuy: book.saleInfo.saleability === 'FOR_SALE' ? book.saleInfo.buyLink : null,
+                linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ? book.accessInfo.pdf.acsTokenLink : null,
+                linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ? book.accessInfo.epub.acsTokenLink : null,
+                linkPreview: book.volumeInfo.previewLink,
+                genre: book.volumeInfo.categories,
+                publish_date: book.volumeInfo.publishedDate !== undefined ? book.volumeInfo.publishedDate.slice(0, 4) : '0000',
+                idUser: localStorage.getItem('idUser'),
+                favorite: value,
+            };
+            const response = favoriteBook(payload, snackOpenFun);
+        } else {
+            handleOpenForm();
+            snackOpenFun('You need to login first', 'info');
+        }
+      
     };
 
 
@@ -174,8 +205,8 @@ export default function BookList({ books }) {
                                         >
                                             <MoreVertIcon />
                                         </IconButton>
-                                        <IconButton edge="end" onClick={(e) => console.log(e.target.getAttribute("value"))}>
-                                            <FavoriteBorderIcon value="1" />
+                                        <IconButton edge="end" onClick={(e) => favoriteCall(e, i)}>
+                                            <FavoriteBorderIcon value={1} />
                                         </IconButton>
                                     </div>
                                     <Typography variant="h6" className={classes.titleSize + ` ` + classes.textCenter}>
