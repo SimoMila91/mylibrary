@@ -1,14 +1,12 @@
 import React, { useContext } from 'react';
 import {
     Dialog, Typography, DialogTitle, DialogContent,
-    DialogContentText, DialogActions,
-    IconButton, Button,
+    DialogActions, IconButton, Button,
     Box,
     makeStyles,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Rating from '@material-ui/lab/Rating';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ImageNotFound from '../../images/imageNotFound.svg';
 import { Context } from '../../context/Context';
 
@@ -104,10 +102,9 @@ export default function BookFocus({ onClose, onOpen, id }) {
                                         <li>
                                             <Box component="fieldset" mb={3} borderColor="transparent">
                                                 <Rating
-                                                    name="customized-empty"
-                                                    defaultValue={book.volumeInfo.averageRating}
-                                                    precision={0.5}
-                                                    emptyIcon={<StarBorderIcon fontSize="inherit" />}
+                                                    name="read-only"
+                                                    value={book.volumeInfo.averageRating}
+                                                    readOnly
                                                 />
                                             </Box>
                                         </li>

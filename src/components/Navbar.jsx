@@ -1,24 +1,36 @@
 import React, { useState, useContext } from 'react';
 import {
-    Typography, Button, AppBar, Toolbar, IconButton, makeStyles,
+    Typography, AppBar, Toolbar, IconButton, makeStyles,
     Dialog, DialogContentText, DialogContent, Menu,
-    MenuItem, Link
+    MenuItem, Link, withStyles, ListItemIcon, ListItemText,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { NavLink } from 'react-router-dom';
 import '../App.css';
 import logoBook from '../images/logoBook.png';
-import NavbarContent from './NavbarContent';
 import Login from './logRegLog/Login';
 import SignUp from './logRegLog/SignUp';
 import { Context } from '../context/Context';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Fab from '@material-ui/core/Fab';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Zoom from '@material-ui/core/Zoom';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import FaceIcon from '@material-ui/icons/Face';
 
 
 const font = "'Satisfy', cursive";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    cont: {
         flexGrow: 1,
     },
     menuButton: {
@@ -58,15 +70,96 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: 600,
         textAlign: 'center',
     },
+    buttonScroll: {
+        position: 'fixed',
+        bottom: theme.spacing(10),
+        right: theme.spacing(2),
+    },
+    linkStyle: {
+        color: '#212529', 
+        textDecoration: 'none',
+    },
+    exitButton: {
+        padding: 0,
+    },
+    mAutoPadOne: {
+        margin: 'auto',
+        padding: 1,
+    },
+    closeIconStyle: {
+        fontSize: '1.8rem',
+        color: 'grey',
+    },
+    scrollColor: {
+        backgroundColor: '#64b5f6',
+    },
+    dialogForm: {
+        paddingBottom: 5,
+        textAlign: 'center',
+    },
+    btnForm: {
+        textDecoration: 'none', 
+        color: '#007bff',
+    },
 }));
 
+const StyledMenu = withStyles({
+    paper: {
+      border: '1px solid #d3d4d5',
+    },
+})((props) => (
+    <Menu
+      elevation={0}
+      getContentAnchorEl={null}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      {...props}
+    />
+));
 
-export default function Navbar() {
+function ScrollTop(props) {
+    const { children, window } = props;
+    const classes = useStyles();
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({
+      target: window ? window() : undefined,
+      disableHysteresis: true,
+      threshold: 500,
+    });
+  
+    const handleClickButton = (event) => {
+      const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
+  
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  
+    return (
+      <Zoom in={trigger}>
+        <div onClick={handleClickButton} role="presentation" className={classes.buttonScroll}>
+          {children}
+        </div>
+      </Zoom>
+    );
+}
+
+
+export default function Navbar(props) {
     const classes = useStyles();
 
     const { loggedIn, handleOpenForm, open, handleCloseForm } = useContext(Context);
     const [selectedForm, setForm] = useState('Login');
     const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElMenu, setAnchorElMenu] = useState(null);
     const openmenu = Boolean(anchorEl);
 
     const formChange = (e) => {
@@ -85,15 +178,23 @@ export default function Navbar() {
         setAnchorEl(false);
     };
 
+    const handleClose = () => {
+        setAnchorElMenu(false);
+    };
+
+    const handleClick = (event) => {
+        setAnchorElMenu(event.currentTarget);
+      };
+    
     const renderForm = () => {
         if (selectedForm === 'Signup') {
             return (
                 <div>
                     <SignUp handleClose={handleCloseForm} className={classes.formStyle} />
-                    <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
+                    <DialogContent className={classes.dialogForm}>
                         <DialogContentText>
                             Do you have an account?
-                            <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Login</Link>
+                            <Link href="#" className={classes.btnForm} onClick={formChange}> Login</Link>
                         </DialogContentText>
                     </DialogContent>
                 </div>
@@ -102,10 +203,10 @@ export default function Navbar() {
             return (
                 <div>
                     <Login handleClose={handleCloseForm} />
-                    <DialogContent style={{ textAlign: 'center', paddingBottom: 5 }}>
+                    <DialogContent className={classes.dialogForm}>
                         <DialogContentText>
                             Don't you have an account?
-                        <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Signup</Link>
+                        <Link href="#" className={classes.btnForm} onClick={formChange}> Signup</Link>
                         </DialogContentText>
                     </DialogContent>
                 </div>
@@ -113,10 +214,78 @@ export default function Navbar() {
         }
     };
 
+    const menuNavbar = (
+        <StyledMenu
+            id="customized-menu"
+            anchorEl={anchorElMenu}
+            keepMounted
+            open={Boolean(anchorElMenu)}
+            onClose={handleClose}
+        >   
+            <MenuItem className={classes.exitButton} onClick={handleClose}>
+                <IconButton className={classes.mAutoPadOne}>
+                    <ExpandLessIcon />
+                </IconButton>
+            </MenuItem>
+            <MenuItem component={NavLink} to="/">
+                <ListItemIcon>
+                    <HomeIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Home" className={classes.linkStyle} />
+            </MenuItem>
+            <MenuItem  component={NavLink} to="/search">
+                <ListItemIcon>
+                    <SearchIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Books" className={classes.linkStyle} />
+            </MenuItem>
+            <MenuItem component={NavLink} to="/articles">
+                <ListItemIcon>
+                    <LocalLibraryIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Articles" className={classes.linkStyle} />
+            </MenuItem>
+            <MenuItem>
+                <ListItemIcon>
+                    <LiveHelpIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Faq" />
+            </MenuItem>
+        </StyledMenu>
+    );
+
+    const accountMenu = (
+        <StyledMenu
+            id="account-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={openmenu}
+            onClose={handleMenuClose}
+        >   
+            <MenuItem className={classes.exitButton} onClick={handleMenuClose}>
+                <IconButton className={classes.mAutoPadOne}>
+                    <ExpandLessIcon />
+                </IconButton>
+            </MenuItem>
+            <MenuItem component={NavLink} to="/profile" onClick={handleMenuClose}>
+                <IconButton>
+                    <FaceIcon fontSize="small" />
+                </IconButton>
+                <ListItemText primary="My page" className={classes.linkStyle} />
+            </MenuItem>
+            <MenuItem component={NavLink} to="/logout" onClick={handleMenuClose}>
+                <IconButton>
+                    <ExitToAppIcon fontSize="small" />
+                </IconButton>
+                <ListItemText primary="Logout" className={classes.linkStyle} />
+            </MenuItem>
+        </StyledMenu>
+    );
+
     return (
-        <div className={classes.root}>
+        <div className={classes.cont}>
             <AppBar className={classes.style} position="static">
-                <Toolbar className={classes.customizeToolbar} >
+                <Toolbar className={classes.customizeToolbar} id="back-to-top-anchor">
                     <IconButton component={NavLink} to="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <img className={classes.logoStyle} src={`${logoBook}`} alt="logo" />
                     </IconButton>
@@ -124,62 +293,65 @@ export default function Navbar() {
                         My Library
                     </Typography>
                     <Typography className={classes.notVisible}></Typography>
-                    {
-                        loggedIn ?
-                        <>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="account-menu"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu
-                                id="account-menu"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                open={openmenu}
-                                onClose={handleMenuClose}
-                            >
-                                <MenuItem onClick={handleMenuClose}>My profile</MenuItem>
-                                <MenuItem onClick={handleMenuClose}><NavLink to="/logout" style={{ color: '#212529', textDecoration: 'none' }}>Logout</NavLink></MenuItem>
-                            </Menu>
-                        </>
-                        :
-                        <>
-                            <Button className={classes.button} variant="contained" onClick={handleOpenForm} color="inherit">SIGN IN / SIGN UP</Button>
-                            <Dialog
-                                justify="center"
-                                maxWidth="xl"
-                                open={open}
-                                onClose={handleCloseForm}
-                                aria-labelledby="form-dialog-title"
-                            >
+                    { loggedIn ?
+                            <>
                                 <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="account-menu"
+                                    onClick={handleMenu}
                                     color="inherit"
-                                    onClick={handleCloseForm}
-                                    justify="flex-end"
-                                    className={classes.button}
+                                    disableRipple
                                 >
-                                    <CloseIcon
-                                        style={{
-                                            fontSize: '1.8rem',
-                                            color: 'grey',
-                                        }}
-                                    />
+                                    <AccountCircle />
                                 </IconButton>
-                                {renderForm()}
-                            </Dialog>
-                        </>
+                                {accountMenu}
+                            </>
+                            :
+                            <>
+                                <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="account-menu"
+                                    onClick={handleOpenForm}
+                                    color="inherit"
+                                    disableRipple
+                                >
+                                    <AccountCircleOutlinedIcon />
+                                </IconButton>
+                                <Dialog
+                                    justify="center"
+                                    maxWidth="xl"
+                                    open={open}
+                                    onClose={handleCloseForm}
+                                    aria-labelledby="form-dialog-title"
+                                >
+                                    <IconButton
+                                        color="inherit"
+                                        onClick={handleCloseForm}
+                                        justify="flex-end"
+                                        className={classes.button}
+                                    >
+                                        <CloseIcon className={classes.closeIconStyle} />
+                                    </IconButton>
+                                    {renderForm()}
+                                </Dialog>
+                            </>
                     }
+                     <IconButton
+                        aria-label="menu-mobile"
+                        aria-controls="customized-menu"
+                        onClick={handleClick}
+                        color="inherit"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    {menuNavbar}
                 </Toolbar>
             </AppBar>
-            <NavbarContent />
+            <ScrollTop {...props}>
+                <Fab className={classes.scrollColor} size="small" aria-label="scroll back to top">
+                <KeyboardArrowUpIcon />
+                </Fab>
+            </ScrollTop>
         </div>
     );
 };

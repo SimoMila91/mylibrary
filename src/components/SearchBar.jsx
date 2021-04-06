@@ -93,7 +93,6 @@ export default function SearchBar({ onFormSubmit }) {
                     </IconButton>
                 </Paper>
             </form>
-
             <Dialog
                 disableBackdropClick
                 disableEscapeKeyDown

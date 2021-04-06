@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import googleBook from '../api/googleBook';
 import HomeProgress from './home/HomeProgress';
 import { Paper, Grid, Container, Typography, Button, Divider} from '@material-ui/core';
 import { Context } from '../context/Context';
 import { NewsContext } from '../context/NewsContext';
 import NewsArticle from './home/NewsArticles';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        paddingTop: '4%', 
+        textAlign: 'center', 
+    },
+    newBook: {
         width: 'auto',
         color: '#494949',
-        marginTop: '4%',
+        margin: '4% 0',
     },
     title: {
         [theme.breakpoints.up('xs')]: {
@@ -21,8 +25,14 @@ const useStyles = makeStyles((theme) => ({
         },
         padding: '1.4%',
     },
+    marginTitle: {
+        marginBottom: '2%',
+    },
+    marginButton: {
+        margin: '9% 0',
+        color: '#007bff',
+    },
 }));
-
 
 export default function Home(props) {
     const classes = useStyles();
@@ -30,12 +40,14 @@ export default function Home(props) {
     const { article } = useContext(NewsContext);
     const [news, setNews] = useState([]);
 
-    const termSort = (term) => {
-        googleBook.get(`/books/v1/volumes?q=subject:${term}&maxResults=10&orderBy=newest&key=${process.env.REACT_APP_GOOGLE_API_KEY}`)
-            .then(res => {
-                setNews(res.data.items);
-            })
-            .catch(err => console.warn(err));
+    const termSort = async (term) => {
+        const payload = { term: term };
+        const response = await axios.post("http://localhost:3000/newbook", payload);
+        if (response.data !== undefined) {
+            setNews(response.data);
+        } else {
+            console.log("error");
+        }
     };
 
     useEffect((genre) => {
@@ -48,28 +60,29 @@ export default function Home(props) {
         // eslint-disable-line react-hooks/exhaustive-deps
     }, [genre])
 
-    console.log(article);
     return (
         <>
-            <Container style={{ paddingTop: '4%', textAlign: 'center' }} maxWidth="lg">
-                <Paper style={{ marginBottom: '2%', }} >
+            <Container className={classes.root} maxWidth="lg">
+                <Paper className={classes.marginTitle}>
                     <Typography className={classes.title}>News and Reviews from the World of Books!</Typography>
                 </Paper>
                 <Grid container spacing={2}>
                     {
-                        article ? article.articles.slice(0, 6).map((news) => <NewsArticle news={news} /> )
+                        article ? article.slice(0, 6).map((news, i) => <NewsArticle news={news} key={i} /> )
                         : 
                         <p>Loading</p>                   
                     }
                 </Grid>
-                <Button style={{margin: '3% 0'}} variant="contained" color="inherit">
-                    <NavLink to="/article" style={{textDecoration: 'none'}}>check more articles</NavLink>
+                <Button component={NavLink} to="/articles" className={classes.marginButton} variant="contained" color="inherit">
+                    check more articles
                 </Button>
             </Container>
             <Divider />
-            <div className={classes.root}>
-                 <HomeProgress news={news} />
-            </div>
+            <Container maxWidth={false} className={classes.newBook}>
+               {
+                   news ? <HomeProgress news={news} /> : <p>Loading..</p>
+               }
+            </Container>
         </>
     )
 }

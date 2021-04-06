@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.up('lg')]: {
             fontSize: 19,
+            width: '23rem',
         },
     },
     buttons: {
@@ -78,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
             textAlign: 'inherit',
         },
     },
+    gridStyle: {
+        display: 'flex',
+    }
 }));
 
 const truncateString = (str, n) => {
@@ -91,6 +95,7 @@ export default function BookList({ books }) {
     const [openDetails, setOpenDetails] = useState(false);
     const { handleOpenForm, loggedIn, snackOpenFun } = useContext(Context);
     const isMenuOpen = Boolean(anchorEl);
+    const [clicks, setClicks] = useState(localStorage.getItem('clicks') ? localStorage.getItem('clicks') : []);
 
     const handleOpenDetails = (id) => {
         setOpenDetails(true);
@@ -113,9 +118,9 @@ export default function BookList({ books }) {
             console.log(book);
             const payload = {
                 idBook: book.id,
-                title: book.volumeInfo.title,
+                title: book.volumeInfo.title.replaceAll("'", "''"),
                 author: book.volumeInfo.authors ? book.volumeInfo.authors : null,
-                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "&#39;") : null,
+                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "''") : null,
                 linkImage: book.volumeInfo.imageLinks.thumbnail ? book.volumeInfo.imageLinks.thumbnail : null,
                 linkBuy: book.saleInfo.saleability === 'FOR_SALE' ? book.saleInfo.buyLink : null,
                 linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ? book.accessInfo.pdf.acsTokenLink : null,
@@ -133,18 +138,24 @@ export default function BookList({ books }) {
         }
         setAnchorEl(null);
     };
-
+    
     const favoriteCall = (e, i) => {
-        setId(i);
         if (loggedIn) {
-            const value = e.target.getAttribute("value");
-            const book = books[id];
-            console.log(book);
+            setClicks(oldArray => [...oldArray, i]);
+            localStorage.setItem('clicks', clicks);
+            console.log(localStorage.getItem('clicks'));
+            let value = e.target.getAttribute("value");
+            if (value === null) {
+                value = 0; 
+            };
+            console.log(value + " per database");
+            const parse = parseInt(value);
+            const book = books[i];
             const payload = {
                 idBook: book.id,
-                title: book.volumeInfo.title,
+                title: book.volumeInfo.title.replaceAll("'", "''"),
                 author: book.volumeInfo.authors ? book.volumeInfo.authors : null,
-                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "&#39;") : null,
+                plot:  book.volumeInfo.description ? book.volumeInfo.description.replaceAll("'", "''") : null,
                 linkImage: book.volumeInfo.imageLinks.thumbnail ? book.volumeInfo.imageLinks.thumbnail : null,
                 linkBuy: book.saleInfo.saleability === 'FOR_SALE' ? book.saleInfo.buyLink : null,
                 linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ? book.accessInfo.pdf.acsTokenLink : null,
@@ -153,9 +164,10 @@ export default function BookList({ books }) {
                 genre: book.volumeInfo.categories,
                 publish_date: book.volumeInfo.publishedDate !== undefined ? book.volumeInfo.publishedDate.slice(0, 4) : '0000',
                 idUser: localStorage.getItem('idUser'),
-                favorite: value,
+                favorite: parse,
             };
-            const response = favoriteBook(payload, snackOpenFun);
+            favoriteBook(payload, snackOpenFun);
+          
         } else {
             handleOpenForm();
             snackOpenFun('You need to login first', 'info');
@@ -182,9 +194,9 @@ export default function BookList({ books }) {
 
     return (
         <React.Fragment>
-            <Grid container spacing={4}>
+            <Grid container spacing={4} style={{padding: '0px 2% 6% 2%'}}>
                 {books.map((book, i) => (
-                    <Grid style={{ display: 'flex' }} key={i} item xs={12} md={12} lg={6} xl={4}>
+                    <Grid className={classes.gridStyle} key={i} item xs={12} md={12} lg={6} xl={4}>
                         <Card className={classes.root} >
                             <img 
                                 className={classes.cover}
@@ -205,8 +217,10 @@ export default function BookList({ books }) {
                                         >
                                             <MoreVertIcon />
                                         </IconButton>
-                                        <IconButton edge="end" onClick={(e) => favoriteCall(e, i)}>
-                                            <FavoriteBorderIcon value={1} />
+                                        <IconButton edge="end" onClick={e => favoriteCall(e, i)}>
+                                            {
+                                                book.favorite === true || clicks.includes(i) ?  <FavoriteIcon value={0} /> : <FavoriteBorderIcon value={1} />
+                                            }
                                         </IconButton>
                                     </div>
                                     <Typography variant="h6" className={classes.titleSize + ` ` + classes.textCenter}>

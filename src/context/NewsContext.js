@@ -7,9 +7,22 @@ export const NewsContextProvider = props => {
     const [article, setArticle] = useState();
 
     useEffect(() => {
-        axios.get("https://newsapi.org/v2/everything?q=libri-da-leggere&language=it&sortBy=popularity&apiKey=c8da4df76372421ca59a9dbc2d7d16ef")
+        axios.post("http://localhost:3000/articles")
         .then(res => {
-            setArticle(res.data);
+            // filter results in order to delete multiple and equal books
+            const response = res.data.articles;
+            const ress = res.data.articles;
+            for (let i = 0; i < response.length-1; i++) {
+                for (let k = i; k < response.length; k++) {
+                    let modifyStringTwo = response[k].link.includes('https') ? response[k].link : response[k].link.replace('http', 'https');
+                    let modifyString = response[i].link.includes('https') ? response[i].link : response[i].link.replace('http', 'https');
+                    if (response[i].title === response[k].title || modifyString === modifyStringTwo || response[i].summary === response[k].summary) {
+                        ress.splice(k, 1);
+                    }
+                }
+            }
+            setArticle(ress);
+            localStorage.setItem('articles', JSON.stringify(ress));
         }).catch(err => {
             console.log(err);
         });

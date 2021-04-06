@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-
-
-const font = "'Satisfy', cursive";
+import { Button } from '@material-ui/core';
 
 const useStyle = makeStyles(theme => ({
     titleWrapper: {
@@ -17,18 +15,6 @@ const useStyle = makeStyles(theme => ({
         },
         fontWeight: 'bold',
     },
-    preTitle: {
-        [theme.breakpoints.down('xs')]: {
-            fontSize: 15,
-        },
-    },
-    titleStyle: {
-        fontFamily: font,
-        marginTop: 20,
-        [theme.breakpoints.down('xs')]: {
-            fontSize: 50,
-        },
-    },
 }));
 
 export default function NavbarContent() {
@@ -39,10 +25,10 @@ export default function NavbarContent() {
             <div className={classes.titleWrapper}>
                 <div className={classes.linkStyle}>
                     <ul>
-                        <li><NavLink to="/" style={{ color: '#212529', textDecoration: 'none' }}>HOME</NavLink></li>
-                        <li><NavLink to="/search" style={{ color: '#212529', textDecoration: 'none' }}>SEARCH</NavLink></li>
-                        <li>ARTICLES</li>
-                        <li>FAQ</li>
+                        <li><Button style={{fontSize: 17}} variant="contained"><NavLink to="/" style={{ color: '#212529', textDecoration: 'none' }}>HOME</NavLink></Button></li>
+                        <li><Button style={{fontSize: 17}} variant="contained"><NavLink to="/search" style={{ color: '#212529', textDecoration: 'none' }}>SEARCH</NavLink></Button></li>
+                        <li><Button style={{fontSize: 17}} variant="contained">ARTICLES</Button></li>
+                        <li><Button style={{fontSize: 17}} variant="contained">FAQ</Button></li>
                     </ul>
                 </div>
             </div>

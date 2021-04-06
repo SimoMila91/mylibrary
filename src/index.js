@@ -5,12 +5,11 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import axios from 'axios';
 
+const font = "'Raleway', sans serif";
+
 const theme = createMuiTheme({
   typography: {
-    fontFamily: [
-      'Raleway',
-      'sans serif'
-    ].join(','),
+    fontFamily: font,
   },
   palette: {
     primary: green,
@@ -18,7 +17,6 @@ const theme = createMuiTheme({
 });
 
 axios.interceptors.request.use(config => {
-  console.log('eseguo request interceptor');
   const token = localStorage.getItem('token');
   config.headers.Authorization = `Bearer ${token}`;
   return config;

@@ -1,13 +1,6 @@
 import React, { useContext } from 'react';
-import {
-    Button,
-    Paper,
-    Grid,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Typography,
+import { Button, Paper, Grid, Select, MenuItem, 
+        FormControl, InputLabel,Typography, Link 
 } from '@material-ui/core';
 import Carousel from 'react-material-ui-carousel';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: 'none',
     },
     checkButton: {
-        color: 'black',
         border: '3px solid black',
         textTransform: 'capitalize',
         margin: 'auto',
@@ -49,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
             width: '18rem',
         },
         textAlign: 'center',
+        backgroundColor: "#dfe0d7",
     },
     selectStyle: {
         width: '100%',
@@ -63,6 +56,23 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flexWrap: 'wrap-reverse',
         },
+    },
+    linkStyle: {
+        color: 'black',
+        "&:hover": {
+            color: 'black',
+            textDecoration: 'none',
+        },
+    },
+    titleStyle: {
+        margin: "auto", 
+        fontSize: 22,
+    },
+    marginAuto: {
+        margin: 'auto',
+    },
+    widthSelect: {
+        width: '100%',
     },
 }));
 
@@ -81,7 +91,7 @@ export default function HomeProgress({ news }) {
     ];
 
     return (
-        <>
+        <div>
             <Grid container>
                 <Grid item xl={12} sm={12}>
                     <Grid container justify="center" spacing={10} className={classes.mobileStyle}>
@@ -98,15 +108,18 @@ export default function HomeProgress({ news }) {
                                         className={classes.project}
                                         key={id}
                                         elevation={10}
-                                        style={{
-                                            backgroundColor: "#dfe0d7",
-                                        }}
                                     >
-                                        <h2 style={{ margin: "auto", fontSize: 22 }}>{news.volumeInfo.title}</h2>
-                                        <img style={{ margin: "auto" }} src={news.volumeInfo.imageLinks.thumbnail} alt={news.volumeInfo.title} />
+                                        <h2 className={classes.titleStyle}>{news.volumeInfo.title}</h2>
+                                        <img className={classes.marginAuto} src={news.volumeInfo.imageLinks.thumbnail} alt={news.volumeInfo.title} />
                                         <Button size="small" className={classes.checkButton}>
-                                            Check it out!
-                                    </Button>
+                                            <Link 
+                                                href={news.volumeInfo.canonicalVolumeLink ? news.volumeInfo.canonicalVolumeLink : null} 
+                                                target="_blank"
+                                                className={classes.linkStyle}
+                                            >
+                                                Check it out!
+                                            </Link>
+                                        </Button>
                                     </Paper>
                                 )) : null}
                             </Carousel>
@@ -118,9 +131,7 @@ export default function HomeProgress({ news }) {
                                 <FormControl className={classes.selectStyle}>
                                     <InputLabel id="demo-mutiple-name-label">Select a genre</InputLabel>
                                     <Select
-                                        style={{
-                                            width: '100%'
-                                        }}
+                                        className={classes.widthSelect}
                                         labelId="demo-customized-select-label"
                                         id="demo-customized-select"
                                         value={genre}
@@ -136,6 +147,6 @@ export default function HomeProgress({ news }) {
                     </Grid>
                 </Grid>
             </Grid>
-        </>
+        </div>
     )
 }

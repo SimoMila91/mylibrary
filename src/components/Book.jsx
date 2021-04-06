@@ -1,10 +1,10 @@
 import { Container } from '@material-ui/core';
 import React, { useContext } from 'react';
-import googleBook from '../api/googleBook';
 import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
 import BookList from './book/BookList';
 import { Context } from '../context/Context';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,15 +18,24 @@ export default function Book() {
     const classes = useStyles();
     const { type, age, books, setBooks, filterGenre, language } = useContext(Context);
 
-    let typeChange = type !== '' && filterGenre === '' ? `&filter=${type}` : '';
+    let typeChange = type !== '' && filterGenre === '' ? type : '';
 
 
     const onTermSubmit = async (term) => {
-        const response = await googleBook.get(`/books/v1/volumes?q=${term}&langRestrict=${language}&maxResults=40${typeChange}&key=${process.env.REACT_APP_GOOGLE_API_KEY}`);
-        if (response.data.items !== undefined) {
-            setBooks(response.data.items);
-        } else
+        let id = localStorage.getItem('idUser');
+        const payload = {
+            term: term,
+            language: language,
+            typeChange: typeChange, 
+            idUser: id
+        };
+        const response = await axios.post("http://localhost:3000/books", payload);
+        if (response.data !== undefined) {
+            setBooks(response.data);
+            console.log(response.data);
+        } else {
             console.log("non ci sono risultati");
+        }
     };
 
     const sortFunction = (a, b) => {

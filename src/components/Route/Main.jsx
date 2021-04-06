@@ -7,6 +7,7 @@ import SignUp from '../logRegLog/SignUp';
 import Login from '../logRegLog/Login';
 import ArticleList from '../articles/ArticleList';
 import PrivateRoute from './PrivateRoute';
+import PersonalPage from '../usersRoutes/PersonalPage';
 
 
 export default function Main() {
@@ -17,9 +18,8 @@ export default function Main() {
             <Route path="/logout" component={Logout} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
-            <PrivateRoute path="/article" component={ArticleList} />
+            <PrivateRoute path="/articles" component={ArticleList} />
+            <PrivateRoute path="/profile" component={PersonalPage} />
         </Switch>
     )
-
-
 };

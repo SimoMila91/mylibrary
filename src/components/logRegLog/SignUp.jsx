@@ -66,11 +66,11 @@ export default function Login({ handleClose }) {
     };
 
     useEffect(() => {
-        if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8)
+        if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8 && name !== '')
             setControl(true);
         else
             setControl(false);
-    }, [email, psw]);
+    }, [email, psw, name]);
 
     const signup = e => {
         e.preventDefault();
@@ -91,6 +91,7 @@ export default function Login({ handleClose }) {
 
     const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
     const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
+    const textFieldName = name === '' && controlEmail(email) && psw.length >= 8 ? { helperText: 'Also name is required' } : null; 
     const buttonType = control === false ? { disabled: true } : { color: 'primary' };
 
     return (
@@ -106,6 +107,8 @@ export default function Login({ handleClose }) {
                             <Grid item>
                                 <TextField
                                     className={classes.textFieldStyle}
+                                    {...textFieldName}
+                                    required
                                     label="Name"
                                     onChange={e => setName(e.target.value)}
                                     id="name"
@@ -122,6 +125,7 @@ export default function Login({ handleClose }) {
                                 <TextField
                                     className={classes.textFieldStyle}
                                     {...textField}
+                                    required
                                     id="email"
                                     label="E-Mail"
                                     type="email"

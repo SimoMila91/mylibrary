@@ -58,16 +58,8 @@ export default function Login({ handleClose }) {
     const [control, setControl] = useState(false);
     const [showPassword, setVisibility] = useState(false);
 
-    const controlEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) || email === '')
-            return true;
-        else
-            return false;
-    };
-
-
     useEffect(() => {
-        if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8)
+        if (email !== '' && psw.length >= 8)
             setControl(true);
         else
             setControl(false);
@@ -85,6 +77,7 @@ export default function Login({ handleClose }) {
                 snackOpenFun(response.string, 'success');
                 localStorage.setItem('token', response.token);
                 localStorage.setItem('idUser', response.id);
+                localStorage.setItem('username', response.name);
                 renderButton();
                 handleClose();
             }).catch(err => {
@@ -92,8 +85,6 @@ export default function Login({ handleClose }) {
             });
     }
 
-    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
-    const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
     const buttonType = control === false ? { disabled: true } : { color: 'primary' };
 
     return (
@@ -109,7 +100,6 @@ export default function Login({ handleClose }) {
                             <Grid item>
                                 <TextField
                                     className={classes.textFieldStyle}
-                                    {...textField}
                                     id="email"
                                     label="E-Mail"
                                     type="email"
@@ -126,11 +116,10 @@ export default function Login({ handleClose }) {
                                 <LockIcon color="disabled" />
                             </Grid>
                             <Grid item>
-                                <FormControl {...passwordControl} >
+                                <FormControl>
                                     <InputLabel>Password</InputLabel>
                                     <Input
                                         className={classes.textFieldStyle}
-                                        {...passwordControl}
                                         id="psw"
                                         value={psw}
                                         onChange={e => setPsw(e.target.value)}
