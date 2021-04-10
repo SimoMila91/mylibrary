@@ -6,6 +6,8 @@ import { Context } from '../context/Context';
 import { NewsContext } from '../context/NewsContext';
 import NewsArticle from './home/NewsArticles';
 import { NavLink } from 'react-router-dom';
+import booklover from '../images/unDraw/booklover.svg';
+import backgroundImg from '../images/unDraw/backgroundsvg.svg';
 import axios from 'axios';
 
 
@@ -32,6 +34,26 @@ const useStyles = makeStyles((theme) => ({
         margin: '9% 0',
         color: '#007bff',
     },
+    welcomeImg: {
+        [theme.breakpoints.up('xs')]: {
+            height: 70,
+            marginBottom: 20,
+        },
+        [theme.breakpoints.up('md')]: {
+            height: 200,
+            marginBottom: 50,
+        },
+    },
+    font: {
+        fontFamily: `'New Tegomin', serif`,
+        [theme.breakpoints.down('sm')]: {
+            fontSize: 14,
+        },
+        [theme.breakpoints.down('xs')]: {
+           display: 'none',
+        },
+
+    }
 }));
 
 export default function Home(props) {
@@ -61,8 +83,10 @@ export default function Home(props) {
     }, [genre])
 
     return (
-        <>
+        <div style={{backgroundImage: `url(${backgroundImg})`}}>
             <Container className={classes.root} maxWidth="lg">
+                <img className={classes.welcomeImg} src={booklover} alt="lover" />
+                <span><Typography variant="h6" display="inline" className={classes.font}>reading can create independence ..</Typography></span>
                 <Paper className={classes.marginTitle}>
                     <Typography className={classes.title}>News and Reviews from the World of Books!</Typography>
                 </Paper>
@@ -83,6 +107,6 @@ export default function Home(props) {
                    news ? <HomeProgress news={news} /> : <p>Loading..</p>
                }
             </Container>
-        </>
+        </div>
     )
 }

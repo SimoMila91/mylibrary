@@ -68,11 +68,11 @@ export default function ModalFilters({ handleClose, onClose }) {
                     <FormControl className={classes.formControl}>
                         <InputLabel>Type</InputLabel>
                         <Select
-                            native
                             value={type}
+                            native
                             onChange={e => handleChangeType(e)}
                         >
-                            <option aria-label="None" value='' />
+                            <option value='' >Paid ebook</option>>
                             <option value="free-ebooks">Free ebooks</option>
                             <option value="ebooks">All ebooks</option>
                         </Select>

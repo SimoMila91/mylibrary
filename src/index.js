@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
 import axios from 'axios';
 
 const font = "'Raleway', sans serif";
@@ -12,7 +11,9 @@ const theme = createMuiTheme({
     fontFamily: font,
   },
   palette: {
-    primary: green,
+    primary: {
+      main: '#007bff',
+    }
   }
 });
 

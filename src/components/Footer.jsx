@@ -1,4 +1,4 @@
-import { Container, Divider, makeStyles, Grid } from '@material-ui/core';
+import { Container, Divider, makeStyles, Grid, Link } from '@material-ui/core';
 import React from 'react';
 import google from '../images/google.svg';
 import logoS2I from '../images/logoS2I.png';
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         textAlign: 'center',
-        padding: '5rem', 
+        padding: '5rem',
         paddingBottom: '1rem',
     },
     backgroundColor: {
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     },
     dividerStyle: {
         marginTop: '3rem',
-    }, 
+    },
     marginGrid: {
         marginTop: '1rem',
     },
@@ -64,37 +64,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Footer() {
     const classes = useStyles();
-    return ( 
+    return (
         <div className={classes.backgroundColor}>
             <Divider />
             <Container className={classes.root}>
-               <Grid 
-                  container 
+               <Grid
+                  container
                   spacing={3}
                   justify="center"
                   alignItems="center"
                 >
                     <Grid item className={classes.firstItem}>
-                        <img className={classes.heightOne} src={google} alt="Google logo"/>
+                        <Link href="https://developers.google.com/books" target="_blank"><img className={classes.heightOne} src={google} alt="Google logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <img className={classes.heightOne} src={react} alt="React logo"/>
+                        <Link href="https://reactjs.org/" target="_blank"><img className={classes.heightOne} src={react} alt="React logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <img className={classes.heightOne} src={nodejs} alt="Nodejs logo"/>
+                        <Link href="https://nodejs.org/en/" target="_blank"><img className={classes.heightOne} src={nodejs} alt="Nodejs logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <img className={classes.heightOne} src={sql} alt="Sql server logo"/>
+                        <Link href="https://www.phpmyadmin.net/" target="_blank"><img className={classes.heightOne} src={sql} alt="Sql server logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <img className={classes.heightTwo} src={newsapi} alt="NewsApi logo"/>
+                        <Link href="https://rapidapi.com/newscatcher-api-newscatcher-api-default/api/newscatcher" target="_blank"><img className={classes.heightTwo} src={newsapi} alt="NewsApi logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <img className={classes.heightOne} src={material} alt="Material UI logo"/>
+                        <Link href="https://material-ui.com/" target="_blank"><img className={classes.heightOne} src={material} alt="Material UI logo"/></Link>
                     </Grid>
                </Grid>
-               <Grid 
-                  container 
+               <Grid
+                  container
                   spacing={3}
                   justify="center"
                   alignItems="center"

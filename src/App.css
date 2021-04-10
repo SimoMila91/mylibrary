@@ -1,37 +1,37 @@
-@import url("https://fonts.googleapis.com/css?family=Play|Satisfy|Raleway:wght@300;500;600;700|Josefin+Slab|Luckiest+Guy&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Play|Satisfy|Raleway:wght@300;500;600;700|New+Tegomin|Josefin+Slab|Luckiest+Guy&display=swap");
 
 body {
-  font-family: "Raleway", sans-serif;
-  background-color: #f1f2e9;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+ font-family: "Raleway", sans-serif;
+ background-color: #f1f2e9;
+ -ms-overflow-style: none; /* IE and Edge */
+ scrollbar-width: none; /* Firefox */
 }
 body::-webkit-scrollbar {
-  display: none;
+ display: none;
 }
 
 .MuiDialogActions-root {
-  justify-content: center !important;
+ justify-content: center !important;
 }
 
 *:focus {
-  outline: none !important;
+ outline: none !important;
 }
 
 ul {
-  list-style-type: none;
-  padding-left: 0;
+ list-style-type: none;
+ padding-left: 0;
 }
 
 ul li {
-  display: inline-block;
-  margin: 1rem;
+ display: inline-block;
+ margin: 1rem;
 }
 
 .link {
-  color: none !important;
+ color: none !important;
 }
 
 .link:hover {
-  color: none !important;
+ color: none !important;
 }

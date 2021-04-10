@@ -22,20 +22,19 @@ export default function Book() {
 
 
     const onTermSubmit = async (term) => {
-        let id = localStorage.getItem('idUser');
+      let id = localStorage.getItem('idUser');
         const payload = {
             term: term,
             language: language,
-            typeChange: typeChange, 
+            typeChange: typeChange,
             idUser: id
         };
         const response = await axios.post("http://localhost:3000/books", payload);
-        if (response.data !== undefined) {
+        console.log(response);
+        if (response.status === 200) {
             setBooks(response.data);
-            console.log(response.data);
-        } else {
-            console.log("non ci sono risultati");
-        }
+            localStorage.removeItem('clicks');
+        };
     };
 
     const sortFunction = (a, b) => {

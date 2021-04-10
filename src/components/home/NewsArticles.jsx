@@ -7,6 +7,8 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         textAlign: 'center',
         lineHeight: 1.8,
+        height: '100%',
+        position: 'relative',
     },
     fontStyle: {
         marginTop: 10, 
@@ -17,9 +19,14 @@ const useStyles = makeStyles((theme) => ({
     content: {
         marginTop: '3%', 
         padding: 12,
+        marginBottom: '3rem',
     },
     linkMore: {
         padding: '0 12px',
+        position: 'absolute',
+        bottom: 0,
+        right: 20,
+        left: 20,
     },
 }));
 

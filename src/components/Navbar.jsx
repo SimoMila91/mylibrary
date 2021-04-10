@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
         left: '50%',
         top: '50%',
         transform: 'translate(-50%, -50%)',
+        [theme.breakpoints.down('xs')]: {
+            fontSize: 25,
+        },
     },
     customizeToolbar: {
         maxHeight: 60,
@@ -101,6 +104,11 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none', 
         color: '#007bff',
     },
+    btnPad: {
+        [theme.breakpoints.down('xs')]: {
+            padding: 4,
+        }
+    }
 }));
 
 const StyledMenu = withStyles({
@@ -137,7 +145,6 @@ function ScrollTop(props) {
   
     const handleClickButton = (event) => {
       const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
-  
       if (anchor) {
         anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
@@ -227,19 +234,19 @@ export default function Navbar(props) {
                     <ExpandLessIcon />
                 </IconButton>
             </MenuItem>
-            <MenuItem component={NavLink} to="/">
+            <MenuItem component={NavLink} to="/" onClick={handleClose}>
                 <ListItemIcon>
                     <HomeIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Home" className={classes.linkStyle} />
             </MenuItem>
-            <MenuItem  component={NavLink} to="/search">
+            <MenuItem  component={NavLink} to="/search" onClick={handleClose}>
                 <ListItemIcon>
                     <SearchIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Books" className={classes.linkStyle} />
             </MenuItem>
-            <MenuItem component={NavLink} to="/articles">
+            <MenuItem component={NavLink} to="/articles" onClick={handleClose}>
                 <ListItemIcon>
                     <LocalLibraryIcon fontSize="small" />
                 </ListItemIcon>
@@ -249,7 +256,7 @@ export default function Navbar(props) {
                 <ListItemIcon>
                     <LiveHelpIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Faq" />
+                <ListItemText primary="Faq" onClick={handleClose}/>
             </MenuItem>
         </StyledMenu>
     );
@@ -301,6 +308,7 @@ export default function Navbar(props) {
                                     onClick={handleMenu}
                                     color="inherit"
                                     disableRipple
+                                    className={classes.btnPad}
                                 >
                                     <AccountCircle />
                                 </IconButton>
@@ -314,6 +322,7 @@ export default function Navbar(props) {
                                     onClick={handleOpenForm}
                                     color="inherit"
                                     disableRipple
+                                    className={classes.btnPad}
                                 >
                                     <AccountCircleOutlinedIcon />
                                 </IconButton>
@@ -341,6 +350,7 @@ export default function Navbar(props) {
                         aria-controls="customized-menu"
                         onClick={handleClick}
                         color="inherit"
+                        className={classes.btnPad}
                     >
                         <MenuIcon />
                     </IconButton>

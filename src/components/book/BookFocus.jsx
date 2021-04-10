@@ -4,11 +4,13 @@ import {
     DialogActions, IconButton, Button,
     Box,
     makeStyles,
+    Divider,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Rating from '@material-ui/lab/Rating';
 import ImageNotFound from '../../images/imageNotFound.svg';
 import { Context } from '../../context/Context';
+import Reviews from '../book/Reviews';
 
 const useStyles = makeStyles(theme => ({
     closeButton: {
@@ -57,7 +59,10 @@ const useStyles = makeStyles(theme => ({
             margin: 'auto',
             marginLeft: 'inherit',
         },
-    }
+    },
+    divider: {
+        marginTop: '5%',
+    },
 }));
 
 export default function BookFocus({ onClose, onOpen, id }) {
@@ -71,16 +76,16 @@ export default function BookFocus({ onClose, onOpen, id }) {
             return (
                 <>
                     <Dialog
-                        maxWidth="lg"
-                        fullWidth={true}
-                        open={onOpen}
+                      maxWidth="lg"
+                      fullWidth={true}
+                      open={onOpen}
                     >
                         <DialogTitle disableTypography>
-                                <Typography className={classes.titleMobile} variant="h4">
-                                    {book.volumeInfo.title}
-                                </Typography>
-                            <IconButton className={classes.closeButton} aria-label="close" onClick={onClose}>
-                                <CloseIcon />
+                          <Typography className={classes.titleMobile} variant="h4">
+                            {book.volumeInfo.title}
+                          </Typography>
+                          <IconButton className={classes.closeButton} aria-label="close" onClick={onClose}>
+                            <CloseIcon />
                             </IconButton>
                         </DialogTitle>
                         <DialogContent dividers>
@@ -136,6 +141,8 @@ export default function BookFocus({ onClose, onOpen, id }) {
                                 </div> : null
                             }
                             </div>
+                            <Divider className={classes.divider} />
+                            <Reviews id={id} />
                         </DialogContent>
                         <DialogActions>
                             {book.saleInfo.saleability === 'FOR_SALE' ?
@@ -163,5 +170,3 @@ export default function BookFocus({ onClose, onOpen, id }) {
         </React.Fragment>
     )
 }
-
-
