@@ -1,4 +1,8 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect
+} from 'react';
 import notFoundImage from '../../images/unDraw/void.svg';
 import {
   Grid,
@@ -8,17 +12,18 @@ import {
   Button,
   Menu,
   MenuItem,
-  IconButton
+  IconButton,
+  makeStyles
 } from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {Context} from '../../context/Context';
+import {
+  Context
+} from '../../context/Context';
 import BookFocus from './BookFocus';
 import insertBook from '../usersRoutes/InsertBook';
 import favoriteBook from '../usersRoutes/FavoriteBook';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import search from '../../images/unDraw/search.svg';
 import know from '../../images/unDraw/readbook.svg';
 
 const useStyles = makeStyles((theme) => ({
@@ -108,25 +113,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const truncateString = (str, n) => {
-  return (str.length > n)
-    ? <> {
+  return (str.length > n) ?
+    <> {
       str.substr(0, n - 1)
     }
-    ...</>
-    : str;
+    ...</> :
+    str;
 };
 
-export default function BookList({books}) {
+export default function BookList({
+  books
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [id, setId] = useState(0);
   const [openDetails, setOpenDetails] = useState(false);
-  const {handleOpenForm, loggedIn, snackOpenFun} = useContext(Context);
+  const {
+    handleOpenForm,
+    loggedIn,
+    snackOpenFun
+  } = useContext(Context);
   const isMenuOpen = Boolean(anchorEl);
   const [clicks, setClicks] = useState(
-    localStorage.getItem('clicks')
-    ? localStorage.getItem('clicks')
-    : []);
+    localStorage.getItem('clicks') ?
+    localStorage.getItem('clicks') : []);
 
   const handleOpenDetails = (id) => {
     setOpenDetails(true);
@@ -153,29 +163,22 @@ export default function BookList({books}) {
       const payload = {
         idBook: book.id,
         title: book.volumeInfo.title.replaceAll("'", "''"),
-        author: book.volumeInfo.authors
-          ? book.volumeInfo.authors
-          : null,
-        plot: book.volumeInfo.description
-          ? book.volumeInfo.description.replaceAll("'", "''")
-          : null,
-        linkImage: book.volumeInfo.imageLinks.thumbnail
-          ? book.volumeInfo.imageLinks.thumbnail
-          : null,
-        linkBuy: book.saleInfo.saleability === 'FOR_SALE'
-          ? book.saleInfo.buyLink
-          : null,
-        linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink
-          ? book.accessInfo.pdf.acsTokenLink
-          : null,
-        linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink
-          ? book.accessInfo.epub.acsTokenLink
-          : null,
+        author: book.volumeInfo.authors ?
+          book.volumeInfo.authors : null,
+        plot: book.volumeInfo.description ?
+          book.volumeInfo.description.replaceAll("'", "''") : null,
+        linkImage: book.volumeInfo.imageLinks.thumbnail ?
+          book.volumeInfo.imageLinks.thumbnail : null,
+        linkBuy: book.saleInfo.saleability === 'FOR_SALE' ?
+          book.saleInfo.buyLink : null,
+        linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ?
+          book.accessInfo.pdf.acsTokenLink : null,
+        linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ?
+          book.accessInfo.epub.acsTokenLink : null,
         linkPreview: book.volumeInfo.previewLink,
         genre: book.volumeInfo.categories,
-        publish_date: book.volumeInfo.publishedDate !== undefined
-          ? book.volumeInfo.publishedDate.slice(0, 4)
-          : '0000',
+        publish_date: book.volumeInfo.publishedDate !== undefined ?
+          book.volumeInfo.publishedDate.slice(0, 4) : '0000',
         type: e.currentTarget.textContent.slice(2),
         idUser: localStorage.getItem('idUser')
       };
@@ -205,29 +208,22 @@ export default function BookList({books}) {
       const payload = {
         idBook: book.id,
         title: book.volumeInfo.title.replaceAll("'", "''"),
-        author: book.volumeInfo.authors
-          ? book.volumeInfo.authors
-          : null,
-        plot: book.volumeInfo.description
-          ? book.volumeInfo.description.replaceAll("'", "''")
-          : null,
-        linkImage: book.volumeInfo.imageLinks.thumbnail
-          ? book.volumeInfo.imageLinks.thumbnail
-          : null,
-        linkBuy: book.saleInfo.saleability === 'FOR_SALE'
-          ? book.saleInfo.buyLink
-          : null,
-        linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink
-          ? book.accessInfo.pdf.acsTokenLink
-          : null,
-        linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink
-          ? book.accessInfo.epub.acsTokenLink
-          : null,
+        author: book.volumeInfo.authors ?
+          book.volumeInfo.authors : null,
+        plot: book.volumeInfo.description ?
+          book.volumeInfo.description.replaceAll("'", "''") : null,
+        linkImage: book.volumeInfo.imageLinks.thumbnail ?
+          book.volumeInfo.imageLinks.thumbnail : null,
+        linkBuy: book.saleInfo.saleability === 'FOR_SALE' ?
+          book.saleInfo.buyLink : null,
+        linkPdf: book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink ?
+          book.accessInfo.pdf.acsTokenLink : null,
+        linkEpub: book.accessInfo.epub.isAvailable && book.accessInfo.epub.acsTokenLink ?
+          book.accessInfo.epub.acsTokenLink : null,
         linkPreview: book.volumeInfo.previewLink,
         genre: book.volumeInfo.categories,
-        publish_date: book.volumeInfo.publishedDate !== undefined
-          ? book.volumeInfo.publishedDate.slice(0, 4)
-          : '0000',
+        publish_date: book.volumeInfo.publishedDate !== undefined ?
+          book.volumeInfo.publishedDate.slice(0, 4) : '0000',
         idUser: localStorage.getItem('idUser'),
         favorite: parse
       }
@@ -241,24 +237,27 @@ export default function BookList({books}) {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu = (<Menu anchorEl={anchorEl} anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right'
-    }} id={menuId} keepMounted="keepMounted" transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right'
-    }} open={isMenuOpen} onClose={() => setAnchorEl(null)}>
-    <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
-    <MenuItem onClick={handleMenuClose}>+ To read</MenuItem>
-  </Menu>);
+  const renderMenu = (
+    <Menu anchorEl={anchorEl} anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }} id={menuId} keepMounted transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }} open={isMenuOpen} onClose={() => setAnchorEl(null)}
+    >
+      <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
+      <MenuItem onClick={handleMenuClose}>+ To read</MenuItem>
+    </Menu>
+  );
 
   return (<React.Fragment>
-    <Grid container="container" spacing={4} style={{
+    <Grid container spacing={4} style={{
         padding: '0px 2% 6% 2%'
       }}>
       {
         books.length !== 0
-          ? books.map((book, i) => (<Grid className={classes.gridStyle} key={i} item="item" xs={12} md={12} lg={6} xl={4}>
+          ? books.map((book, i) => (<Grid className={classes.gridStyle} key={i} item xs={12} md={12} lg={6} xl={4}>
             <Card className={classes.root}>
               <img className={classes.cover} src={book.volumeInfo.imageLinks === undefined
                   ? `${notFoundImage}`

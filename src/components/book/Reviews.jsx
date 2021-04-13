@@ -1,4 +1,9 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback
+} from 'react';
 import {
   Grid,
   makeStyles,
@@ -13,7 +18,9 @@ import CreateIcon from '@material-ui/icons/Create';
 import TimeAgo from 'react-timeago';
 import axios from 'axios';
 import _ from 'lodash';
-import {Context} from '../../context/Context';
+import {
+  Context
+} from '../../context/Context';
 import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles(theme => ({
@@ -68,15 +75,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Reviews({id}) {
+export default function Reviews({
+  id
+}) {
   const classes = useStyles();
   const [review, setReview] = useState(
-    localStorage.getItem('reviews')
-    ? JSON.parse(localStorage.getItem('reviews'))
-    : []);
+    localStorage.getItem('reviews') ?
+    JSON.parse(localStorage.getItem('reviews')) : []);
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const {books, snackOpenFun} = useContext(Context);
+  const {
+    books,
+    snackOpenFun
+  } = useContext(Context);
 
   const request = useCallback(() => {
     const payload = {
@@ -134,11 +145,10 @@ export default function Reviews({id}) {
     }).catch(err => console.log(err));
   };
 
-  const showButton = text.length < 2
-    ? {
+  const showButton = text.length < 2 ? {
       disabled: true
-    }
-    : null;
+    } :
+    null;
   return (<div className={classes.root}>
     <h2>Reviews...</h2>
     <div className={classes.flexDiv}>
@@ -175,14 +185,14 @@ export default function Reviews({id}) {
       review
         ? _.orderBy(review, ['date'], ['desc']).map((r, i) => (<div key={i}>
           <Paper className={classes.paperPadReview} elevation={4}>
-            <Grid container="container" wrap="nowrap" spacing={2}>
-              <Grid item="item">
+            <Grid container wrap="nowrap" spacing={2}>
+              <Grid item>
                 <Avatar style={{
                     fontSize: 12,
                     backgroundColor: `${getRandomColor()}`
                   }} alt="Remy Sharp">{avatarName(r.name)}</Avatar>
               </Grid>
-              <Grid item="item" xs="xs" zeroMinWidth="zeroMinWidth">
+              <Grid item xs zeroMinWidth>
                 <h5 className={classes.textLeft}>{r.name}</h5>
                 <p className={classes.textLeft + " " + classes.mrgTopTen}>
                   {r.review}

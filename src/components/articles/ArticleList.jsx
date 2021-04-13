@@ -1,8 +1,21 @@
-import React, { useContext } from 'react';
-import { Card, CardActionArea, Typography, makeStyles,
-    CardActions, CardContent, CardMedia, Button, Grid, Container
+import React, {
+  useContext
+} from 'react';
+import {
+  Card,
+  CardActionArea,
+  Typography,
+  makeStyles,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Grid,
+  Container
 } from '@material-ui/core';
-import { NewsContext } from '../../context/NewsContext';
+import {
+  NewsContext
+} from '../../context/NewsContext';
 import noImage from '../../images/noImageArticle.jpg';
 
 const font = "'Luckiest Guy', cursive";
@@ -17,45 +30,58 @@ const useStyles = makeStyles({
     padding: '3% 1%',
   },
   backgroundTitle: {
-      display: 'flex',
-      height: '10rem',
-      flex: 1,
-  }, 
+    display: 'flex',
+    height: '10rem',
+    flex: 1,
+  },
   title: {
-      margin: 'auto',
-      marginTop: '3%',
-      fontFamily: font,
-      textTransform: 'uppercase',
-      fontSize: 82,
-      fontWeight: 400,
+    margin: 'auto',
+    marginTop: '3%',
+    fontFamily: font,
+    textTransform: 'uppercase',
+    fontSize: 82,
+    fontWeight: 400,
   },
   itemStyle: {
-    height: '100%', 
+    height: '100%',
     position: 'relative',
   },
   articleTitle: {
     fontSize: '1.3rem',
   },
   buttonPos: {
-      position: 'absolute',
-      bottom: 3,
+    position: 'absolute',
+    bottom: 3,
   }
 });
 
-const truncateString = (str, n) => { return (str.length > n) ? <>{str.substr(0, n - 1)} ...</> : str;};
+const truncateString = (str, n) => {
+  return (str.length > n) ? <>{str.substr(0, n - 1)} ...</> : str;
+};
 
 //const renderHTML = (rawHTML) => React.createElement("div", { dangerouslySetInnerHTML: { __html: rawHTML } });
 
 const addDefaultSrc = (ev) => {
-    ev.target.src = `${noImage}`;
+  ev.target.src = `${noImage}`;
 };
 
 export default function ArticleList() {
-    const classes = useStyles();
-    const { article }  = useContext(NewsContext);
+  const classes = useStyles();
+  const {
+    article
+  } = useContext(NewsContext);
 
-    return (
-        <>
+  const check = (media) => {
+    if (media.includes('daytondailynews')) {
+      return `${noImage}`;
+    } else {
+      return media;
+    }
+  };
+
+
+  return (
+    <>
             <div className={classes.backgroundTitle}>
             <h1 className={classes.title}>. Articles .</h1>
             </div>
@@ -71,7 +97,7 @@ export default function ArticleList() {
                                                 component="img"
                                                 alt="Contemplative Reptile"
                                                 height="140"
-                                                image={news.media ? news.media : news.media_content || `${noImage}`}
+                                                image={news.media ? check(news.media) : `${noImage}`}
                                                 onError={addDefaultSrc}
                                                 title={news.title}
                                             />
@@ -82,7 +108,7 @@ export default function ArticleList() {
                                                 <Typography variant="body2" color="textSecondary" component="span">
                                                 {truncateString(news.summary, 450)}
                                                 </Typography>
-                                                
+
                                             </CardContent>
                                         </CardActionArea>
                                         <CardActions className={classes.buttonPos}>
@@ -101,5 +127,5 @@ export default function ArticleList() {
                 </Grid>
             </Container>
         </>
-    );
+  );
 };

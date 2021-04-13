@@ -1,101 +1,142 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext
+} from 'react';
 import {
-    TextField, DialogActions, DialogContent, DialogTitle,
-    makeStyles, Button, Grid, Input, InputAdornment,
-    IconButton, FormControl, InputLabel, FormHelperText,
+  TextField,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  makeStyles,
+  Button,
+  Grid,
+  Input,
+  InputAdornment,
+  IconButton,
+  FormControl,
+  InputLabel,
+  FormHelperText,
 } from '@material-ui/core';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import LockIcon from '@material-ui/icons/Lock';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PersonIcon from '@material-ui/icons/Person';
-import { Context } from '../../context/Context';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import SecurityIcon from '@material-ui/icons/Security';
+import {
+  Context
+} from '../../context/Context';
 import axios from 'axios';
 
 const useStyle = makeStyles((theme) => ({
-    dialogStyle: {
-        padding: 15,
-        [theme.breakpoints.up('sm')]: {
-            padding: '0 4rem',
-        },
-        maxWidth: 600,
+  dialogStyle: {
+    padding: 15,
+    [theme.breakpoints.up('sm')]: {
+      padding: '0 4rem',
     },
-    textFieldStyle: {
-        width: 'auto',
-        [theme.breakpoints.up('xs')]: {
-            width: 140,
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: 300,
-        },
-        [theme.breakpoints.up('md')]: {
-            width: 340,
-        },
+    maxWidth: 600,
+  },
+  textFieldStyle: {
+    width: 'auto',
+    [theme.breakpoints.up('xs')]: {
+      width: 140,
     },
-    buttonStyle: {
-        justifyContent: 'center',
-        paddingTop: 50,
+    [theme.breakpoints.up('sm')]: {
+      width: 300,
     },
-    forgotPsw: {
-        fontSize: 13,
+    [theme.breakpoints.up('md')]: {
+      width: 340,
     },
-    linkStyle: {
-        textDecoration: 'none',
-        color: 'green',
-        "&:hover": {
-            color: 'black',
-            textDecoration: 'none',
-        },
+  },
+  buttonStyle: {
+    justifyContent: 'center',
+    paddingTop: 50,
+  },
+  forgotPsw: {
+    fontSize: 13,
+  },
+  linkStyle: {
+    textDecoration: 'none',
+    color: 'green',
+    "&:hover": {
+      color: 'black',
+      textDecoration: 'none',
     },
+  },
+  questionStyle: {
+    padding: '11% 0 0',
+  },
+  zeroMargin: {
+    margin: 0,
+  },
 }));
 
-export default function Login({ handleClose }) {
-    const classes = useStyle();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [psw, setPsw] = useState('');
-    const [control, setControl] = useState(false);
-    const [showPassword, setVisibility] = useState(false);
-    const { snackOpenFun } = useContext(Context);
+export default function Login({
+  handleClose
+}) {
+  const classes = useStyle();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [psw, setPsw] = useState('');
+  const [question, setQuestion] = useState('');
+  const [control, setControl] = useState(false);
+  const [showPassword, setVisibility] = useState(false);
+  const {
+    snackOpenFun
+  } = useContext(Context);
 
-    const controlEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) || email === '')
-            return true;
-        else
-            return false;
+  const controlEmail = (email) => {
+    if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) || email === '')
+      return true;
+    else
+      return false;
+  };
+
+  useEffect(() => {
+    if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8 && name !== '' && question !== '')
+      setControl(true);
+    else
+      setControl(false);
+  }, [email, psw, name, question]);
+
+  const signup = e => {
+    e.preventDefault();
+    const payload = {
+      name,
+      email,
+      psw,
+      question
     };
+    axios.post("http://localhost:3000/signup", payload)
+      .then(res => {
+        snackOpenFun(res.data, 'success');
+        handleClose();
+      }).catch((err) => {
+        console.log(err.response);
+        snackOpenFun(err.response.data, 'info');
+      });
+  };
 
-    useEffect(() => {
-        if (email !== '' && psw !== '' && controlEmail(email) && psw.length >= 8 && name !== '')
-            setControl(true);
-        else
-            setControl(false);
-    }, [email, psw, name]);
+  const passwordControl = psw.length >= 8 || psw === '' ? null : {
+    error: true
+  };
+  const textField = controlEmail(email) ? null : {
+    error: true,
+    helperText: 'Email is required'
+  };
+  const textFieldName = name === '' && controlEmail(email) && psw.length >= 8 ? {
+    helperText: 'Also name is required'
+  } : null;
+  const buttonType = control === false ? {
+    disabled: true
+  } : {
+    color: 'primary'
+  };
 
-    const signup = e => {
-        e.preventDefault();
-        const payload = {
-            name,
-            email,
-            psw
-        };
-        axios.post("http://localhost:3000/signup", payload)
-            .then(res => {
-                snackOpenFun(res.data, 'success');
-                handleClose();
-            }).catch((err) => {
-                console.log(err.response);
-                snackOpenFun(err.response.data, 'info');
-            });
-    };
-
-    const passwordControl = psw.length >= 8 || psw === '' ? null : { error: true };
-    const textField = controlEmail(email) ? null : { error: true, helperText: 'Email is required' };
-    const textFieldName = name === '' && controlEmail(email) && psw.length >= 8 ? { helperText: 'Also name is required' } : null; 
-    const buttonType = control === false ? { disabled: true } : { color: 'primary' };
-
-    return (
-        <>
+  return (
+    <>
             <div className={classes.dialogStyle}>
                 <form action="post" onSubmit={signup}>
                     <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
@@ -165,7 +206,30 @@ export default function Login({ handleClose }) {
                                     />
                                     {psw.length >= 8 || psw === '' ? null : <FormHelperText id="my-helper-text">At least 8 characters</FormHelperText>}
                                 </FormControl>
-
+                            </Grid>
+                        </Grid>
+                        <Grid container className={classes.questionStyle} spacing={2} alignItems="flex-end">
+                            <Grid item>
+                                <HelpOutlineIcon />
+                            </Grid>
+                            <Grid item>
+                                  <p className={classes.marginZero}>Who is your best friend?</p>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2} alignItems="flex-end">
+                            <Grid item>
+                                <SecurityIcon color="disabled" />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    className={classes.textFieldStyle}
+                                    required
+                                    label="Security answer"
+                                    onChange={e => setQuestion(e.target.value)}
+                                    id="question"
+                                    type="text"
+                                    fullWidth
+                                />
                             </Grid>
                         </Grid>
                     </DialogContent>
@@ -177,5 +241,5 @@ export default function Login({ handleClose }) {
                 </form>
             </div>
         </>
-    )
+  )
 }

@@ -1,80 +1,95 @@
-import React, { useContext } from 'react';
+import React, {
+  useContext
+} from 'react';
 import {
-    Dialog, Typography, DialogTitle, DialogContent,
-    DialogActions, IconButton, Button,
-    Box,
-    makeStyles,
-    Divider,
+  Dialog,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Button,
+  Box,
+  makeStyles,
+  Divider,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Rating from '@material-ui/lab/Rating';
 import ImageNotFound from '../../images/imageNotFound.svg';
-import { Context } from '../../context/Context';
+import {
+  Context
+} from '../../context/Context';
 import Reviews from '../book/Reviews';
 
 const useStyles = makeStyles(theme => ({
-    closeButton: {
-        position: 'absolute',
-        right: 6,
-        top: 6,
+  closeButton: {
+    position: 'absolute',
+    right: 6,
+    top: 6,
+  },
+  titleMobile: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 16,
+      maxWidth: '12rem',
     },
-    titleMobile: {
-        [theme.breakpoints.down('xs')]: {
-            fontSize: 16,
-            maxWidth: '12rem',
-        },
-        [theme.breakpoints.up('sm')]: {
-            fontSize: 20,
-        },
-        [theme.breakpoints.up('lg')]: {
-            fontSize: 24,
-        },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: 20,
     },
-    respImg: {
-        [theme.breakpoints.up('xs')]: {
-            width: 'auto',
-        },
-        [theme.breakpoints.up('sm')]: {
-            width: 150,
-        },
-        [theme.breakpoints.up('md')]: {
-            width: 200,
-        },
-        [theme.breakpoints.up('lg')]: {
-            width: 230,
-        },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: 24,
     },
-    firstSecMobile: {
-        textAlign: 'initial',
-        [theme.breakpoints.down('xs')]: {
-            textAlign: 'center',
-        },
-        [theme.breakpoints.up('sm')]: {
-            margin: 20,
-            display: 'flex',
-        },
+  },
+  respImg: {
+    [theme.breakpoints.up('xs')]: {
+      width: 'auto',
     },
-    mainInfo: {
-        [theme.breakpoints.up('sm')]: {
-            margin: 'auto',
-            marginLeft: 'inherit',
-        },
+    [theme.breakpoints.up('sm')]: {
+      width: 150,
     },
-    divider: {
-        marginTop: '5%',
+    [theme.breakpoints.up('md')]: {
+      width: 200,
     },
+    [theme.breakpoints.up('lg')]: {
+      width: 230,
+    },
+  },
+  firstSecMobile: {
+    textAlign: 'initial',
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center',
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: 20,
+      display: 'flex',
+    },
+  },
+  mainInfo: {
+    [theme.breakpoints.up('sm')]: {
+      margin: 'auto',
+      marginLeft: 'inherit',
+    },
+  },
+  divider: {
+    marginTop: '5%',
+  },
 }));
 
-export default function BookFocus({ onClose, onOpen, id }) {
-    const classes = useStyles();
+export default function BookFocus({
+  onClose,
+  onOpen,
+  id
+}) {
+  const classes = useStyles();
 
-    const { books } = useContext(Context);
+  const {
+    books
+  } = useContext(Context);
 
-    const renderDialog = () => {
-        if (books.length > 0) {
-            const book = books[id];
-            return (
-                <>
+  const renderDialog = () => {
+    if (books.length > 0) {
+      const book = books[id];
+      return (
+        <>
                     <Dialog
                       maxWidth="lg"
                       fullWidth={true}
@@ -160,13 +175,13 @@ export default function BookFocus({ onClose, onOpen, id }) {
                         </DialogActions>
                     </Dialog>
                 </>
-            )
-        }
-    };
+      )
+    }
+  };
 
-    return (
-        <React.Fragment>
+  return (
+    <React.Fragment>
             {renderDialog()}
         </React.Fragment>
-    )
+  )
 }

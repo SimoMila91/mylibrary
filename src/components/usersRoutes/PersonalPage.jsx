@@ -1,3 +1,9 @@
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext
+} from 'react';
 import {
   Container,
   Grid,
@@ -9,23 +15,26 @@ import {
   Paper,
   Typography,
   IconButton,
-  TextField
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
 import DeleteIcon from '@material-ui/icons/Delete';
-import React, {
-  useState,
-  useEffect,
-  useCallback
-} from 'react';
 import axios from 'axios';
 import voidImg from '../../images/unDraw/void.svg';
-import SearchIcon from '@material-ui/icons/Search';
 import nofound from '../../images/unDraw/nofound.svg';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {
+  Context
+} from '../../context/Context';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -122,6 +131,25 @@ const useStyles = makeStyles((theme) => ({
   progressStyle: {
     margin: 'auto',
     color: '#000',
+  },
+  titleSize: {
+    fontSize: 18,
+  },
+  searchStyle: {
+    margin: 8,
+    width: 300,
+  },
+  divSearch: {
+    paddingLeft: '2%',
+    paddingTop: '2%',
+  },
+  dialogButtons: {
+    justifyContent: 'flex-end !important',
+  },
+  checkmoreButton: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
   }
 }));
 
@@ -142,6 +170,20 @@ export default function PersonalPage() {
   const [results, setResults] = useState([]);
   const [message, setMessage] = useState('');
   const [input, setInput] = useState('');
+  const initialState = {
+    open: false,
+    title: '',
+    author: '',
+    idBook: '',
+  };
+  const [open, setOpen] = useState(initialState);
+  const {
+    snackOpenFun
+  } = useContext(Context);
+
+  const handleClose = () => {
+    setOpen(initialState);
+  };
 
   const request = useCallback(() => {
     const data = {
@@ -153,7 +195,6 @@ export default function PersonalPage() {
     }).then(res => {
       setBooks(res.data.ress);
       setResults(res.data.ress);
-      console.log(res.data.ress);
       setMessage(res.data.string);
     }).catch(err => console.log(err));
   }, [selectedIndex]);
@@ -179,11 +220,29 @@ export default function PersonalPage() {
   useEffect(() => {
     const res = books.filter(o => o.title.toLowerCase().includes(input));
     setResults(res);
-  }, [input]);
+  }, [input, books]);
 
-  const handleDelete = (e, i) => {
-    e.preventDefault();
-    console.log(results[i]);
+  const handleClickOpen = (i) => {
+    setOpen({
+      open: true,
+      title: results[i].title,
+      author: results[i].author,
+      idBook: results[i].idBook,
+    });
+  };
+
+  const handleDelete = () => {
+    const data = {
+      idBook: open.idBook,
+      idUser: localStorage.getItem('idUser'),
+    };
+    axios.delete("http://localhost:3000/deleteBook", {
+      params: data
+    }).then(res => {
+      snackOpenFun(res.data, 'success');
+      handleClose();
+      request();
+    }).catch(err => console.log(err));
   };
 
   const preRender = () => {
@@ -201,6 +260,31 @@ export default function PersonalPage() {
     }
   };
 
+  const renderDialog = () => {
+    return (
+      <Dialog
+        open={open.open}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{open.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete <span style={{color: 'black'}}>{open.title}</span> of <span style={{color: 'black'}}>{open.author}</span>?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={classes.dialogButtons}>
+          <Button onClick={handleClose} color="primary" variant="contained">
+            cancel
+          </Button>
+          <Button onClick={handleDelete} color="secondary" variant="contained" autoFocus>
+            delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  };
+
   return (
     <>
     <Container
@@ -208,29 +292,29 @@ export default function PersonalPage() {
       disableGutters
       className = {classes.root}
     >
-    <Grid container="container">
-    <Grid item="item" xs={12} md={3} lg={2} className={classes.navBorder}>
+    <Grid container>
+    <Grid item xs={12} md={3} lg={2} className={classes.navBorder}>
       <div className={classes.navStyle}>
         <List component="nav" aria-label="main mailbox folders">
-          <ListItem button="button" selected={selectedIndex === 0} onClick={() => handleListItemClick(0)}>
+          <ListItem button selected={selectedIndex === 0} onClick={() => handleListItemClick(0)}>
             <ListItemIcon>
               <ClearAllIcon/>
             </ListItemIcon>
             <ListItemText primary="All my books"/>
           </ListItem>
-          <ListItem button="button" selected={selectedIndex === 2} onClick={() => handleListItemClick(2)}>
+          <ListItem button selected={selectedIndex === 2} onClick={() => handleListItemClick(2)}>
             <ListItemIcon>
               <CheckCircleIcon/>
             </ListItemIcon>
             <ListItemText primary="Books read"/>
           </ListItem>
-          <ListItem button="button" selected={selectedIndex === 1} onClick={() => handleListItemClick(1)}>
+          <ListItem button selected={selectedIndex === 1} onClick={() => handleListItemClick(1)}>
             <ListItemIcon>
               <CheckCircleOutlineIcon/>
             </ListItemIcon>
             <ListItemText primary="Books to read"/>
           </ListItem>
-          <ListItem button="button" selected={selectedIndex === 3} onClick={() => handleListItemClick(3)}>
+          <ListItem button selected={selectedIndex === 3} onClick={() => handleListItemClick(3)}>
             <ListItemIcon>
               <FavoriteIcon/>
             </ListItemIcon>
@@ -239,37 +323,31 @@ export default function PersonalPage() {
         </List>
       </div>
     </Grid>
-    <Grid item="item" xs={12} md={9} lg={10}>
-      <div style={{
-          paddingLeft: '2%',
-          paddingTop: '2%'
-        }}>
-        <TextField id="standard-full-width" label="Live search" style={{
-            margin: 8,
-            width: 300
-          }} placeholder="Fast search" {...visible} value={input} onChange={handleChange} margin="normal" InputLabelProps={{
+    <Grid item xs={12} md={9} lg={10}>
+      <div className={classes.divSearch}>
+        <TextField id="standard-full-width" label="Live search" className={classes.searchStyle} placeholder="Fast search" {...visible} value={input} onChange={handleChange} margin="normal" InputLabelProps={{
             shrink: true
           }} variant="outlined"/>
       </div>
-      <Grid container="container" spacing={4} className={classes.pad}>
+      <Grid container spacing={4} className={classes.pad}>
         {
           results.length !== 0 || books.length !== 0
-            ? results.map((book, i) => (<Grid item="item" key={i} xs={12} md={6} lg={4} xl={3} className={classes.gridPaper}>
+            ? results.map((book, i) => (
+              <Grid item key={i} xs={12} md={6} xl={3} className={classes.gridPaper}>
               <Paper className={classes.paperStyle} elevation={2}>
                 <img className={classes.imgStyle} src={book.linkImage
                     ? book.linkImage
                     : `${voidImg}`} alt={book.title}/>
               </Paper>
               <Paper className={classes.paperStyle + " " + classes.paperWidth}>
-                <IconButton className={classes.deleteButton} onClick={e => handleDelete(e, i)}>
-                  <DeleteIcon/>
-                </IconButton>
-                <Typography variant="h6" style={{
-                    fontSize: 18
-                  }} component="p">{truncateString(book.title, 21)}</Typography>
+                <div>
+                  <IconButton className={classes.deleteButton} onClick={e => handleClickOpen(i)}>
+                    <DeleteIcon/>
+                  </IconButton>
+                </div>
+                <Typography variant="h6" className={classes.titleSize} component="p">{truncateString(book.title, 21)}</Typography>
                 <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Author:
-                  </Typography>
+                  <Typography component="span" display="inline" variant="subtitle2">Author: </Typography>
                   {
                     book.author
                       ? truncateString(book.author, 21)
@@ -277,15 +355,18 @@ export default function PersonalPage() {
                   }
                 </Typography>
                 <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Genre:
-                  </Typography>
+                  <Typography component="span" display="inline" variant="subtitle2">Genre: </Typography>
                   {book.genre}
                 </Typography>
                 <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Published:
-                  </Typography>
+                  <Typography component="span" display="inline" variant="subtitle2">Published: </Typography>
                   {book.publish_date}
                 </Typography>
+                <div className={classes.checkmoreButton}>
+                  <Button size="small" onClick={handleClose} color="primary" variant="outlined">
+                    check more
+                  </Button>
+                </div>
               </Paper>
             </Grid>))
             : preRender()
@@ -301,6 +382,7 @@ export default function PersonalPage() {
         </Grid>
     </Grid>
   </Grid>
+  {renderDialog()}
   </Container>
   </>
   )
