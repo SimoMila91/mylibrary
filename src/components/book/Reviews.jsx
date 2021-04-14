@@ -93,7 +93,7 @@ export default function Reviews({
     const payload = {
       idBook: books[id].id
     };
-    axios.post("http://localhost:3000/getreviews", payload).then(res => {
+    axios.post("https://my-library-backend-italy.herokuapp.com/getreviews", payload).then(res => {
       localStorage.setItem('reviews', JSON.stringify(res.data.reviews));
       setReview(res.data.reviews);
     }).catch(err => console.log(err));
@@ -132,7 +132,7 @@ export default function Reviews({
       date: date,
       name: localStorage.getItem('username')
     };
-    axios.post("http://localhost:3000/reviews", payload).then(res => {
+    axios.post("https://my-library-backend-italy.herokuapp.com/reviews", payload).then(res => {
       setShow(false);
       snackOpenFun(res.data, 'success');
       setText('');

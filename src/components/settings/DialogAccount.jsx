@@ -55,7 +55,7 @@ export default function DialogAccount(props) {
       idUser: localStorage.getItem('idUser'),
 
     };
-    axios.post(`http://localhost:3000/forgotPassword`, payload).then(res => {
+    axios.post(`https://my-library-backend-italy.herokuapp.com/forgotPassword`, payload).then(res => {
       setError(initialSetting);
       setShow({
         firstInputs: false,
@@ -93,7 +93,7 @@ export default function DialogAccount(props) {
     };
 
     if (psw === checkPsw) {
-      axios.put(`http://localhost:3000/${props.request}`, payload)
+      axios.put(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
       .then(res => {
         console.log(res);
         setRedirect(true);
@@ -112,7 +112,7 @@ export default function DialogAccount(props) {
       idUser: localStorage.getItem('idUser'),
     };
 
-    axios.delete(`http://localhost:3000/${props.request}`, payload)
+    axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
     .then(res => {
       console.log(res);
       setRedirect(true);

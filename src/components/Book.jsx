@@ -29,7 +29,7 @@ export default function Book() {
             typeChange: typeChange,
             idUser: id
         };
-        const response = await axios.post("http://localhost:3000/books", payload);
+        const response = await axios.post("https://my-library-backend-italy.herokuapp.com/books", payload);
         console.log(response);
         if (response.status === 200) {
             setBooks(response.data);

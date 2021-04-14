@@ -7,7 +7,7 @@ export const NewsContextProvider = props => {
     const [article, setArticle] = useState();
 
     useEffect(() => {
-        axios.post("http://localhost:3000/articles")
+        axios.post("https://my-library-backend-italy.herokuapp.com/articles")
         .then(res => {
             // filter results in order to delete multiple and equal books
             const response = res.data.articles;

@@ -30,7 +30,7 @@ export default function Logout() {
     if (hour >= 21 || hour <= 3) return 'night';
   };
 
-  axios.post("http://localhost:3000/logout", payload)
+  axios.post("https://my-library-backend-italy.herokuapp.com/logout", payload)
     .then(res => {
       snackOpenFun(`See you soon ${name}. Good ${timeOfDay()}`, 'success');
       localStorage.clear();

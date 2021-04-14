@@ -190,7 +190,7 @@ export default function PersonalPage() {
       idUser: localStorage.getItem('idUser'),
       index: selectedIndex
     };
-    axios.get('http://localhost:3000/read', {
+    axios.get('https://my-library-backend-italy.herokuapp.com/read', {
       params: data
     }).then(res => {
       setBooks(res.data.ress);
@@ -236,7 +236,7 @@ export default function PersonalPage() {
       idBook: open.idBook,
       idUser: localStorage.getItem('idUser'),
     };
-    axios.delete("http://localhost:3000/deleteBook", {
+    axios.delete("https://my-library-backend-italy.herokuapp.com/deleteBook", {
       params: data
     }).then(res => {
       snackOpenFun(res.data, 'success');

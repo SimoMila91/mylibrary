@@ -64,7 +64,7 @@ export default function Home(props) {
 
     const termSort = async (term) => {
         const payload = { term: term };
-        const response = await axios.post("http://localhost:3000/newbook", payload);
+        const response = await axios.post("https://my-library-backend-italy.herokuapp.com/newbook", payload);
         if (response.data !== undefined) {
             setNews(response.data);
         } else {

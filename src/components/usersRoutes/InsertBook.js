@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default function insertBook(payload, snackOpenFun) { 
-    axios.post("http://localhost:3000/insert", payload)
+    axios.post("https://my-library-backend-italy.herokuapp.com/insert", payload)
     .then(res => {
         snackOpenFun(res.data, 'success');
     }).catch((err) => {

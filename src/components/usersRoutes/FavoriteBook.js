@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default function favoriteBook(payload, snackOpenFun) {
-    axios.post("http://localhost:3000/favorite", payload)
+    axios.post("https://my-library-backend-italy.herokuapp.com/favorite", payload)
         .then(res => {
             snackOpenFun(res.data, 'success');
             console.log(res.data);
