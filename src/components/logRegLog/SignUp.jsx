@@ -68,7 +68,7 @@ const useStyle = makeStyles((theme) => ({
   questionStyle: {
     padding: '11% 0 0',
   },
-  zeroMargin: {
+  marginZero: {
     margin: 0,
   },
 }));
