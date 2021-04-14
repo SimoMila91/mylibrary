@@ -19,12 +19,12 @@ export default function Main() {
   return (
     <Switch>
             <Route path="/" exact component={Home} />
-            <Route path="/search" component={Book} />
-            <Route path="/logout" component={Logout} />
+            <PrivateRoute path="/search" component={Book} />
+            <PrivateRoute path="/logout" component={Logout} />
             <Route path="/signup" component={SignUp} />
             <Route path="/login" component={Login} />
             <Route path="/faq" component={Faq} />
-            <Route path="/settings" component={Settings} />
+            <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="/articles" component={ArticleList} />
             <PrivateRoute path="/profile" component={PersonalPage} />
         </Switch>
