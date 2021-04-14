@@ -11,6 +11,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { Context } from '../../context/Context';
 import axios from 'axios';
+import DialogAccount from '../settings/DialogAccount';
 
 const useStyle = makeStyles((theme) => ({
     dialogStyle: {
@@ -46,8 +47,21 @@ const useStyle = makeStyles((theme) => ({
             color: 'black',
             textDecoration: 'none',
         },
+    },
+    dialogTitle: {
+      textAlign: 'center',
+      marginTop: '8%'
+    },
+    hiddenOverflow: {
+        overflow: 'hidden'
+    },
+    borderR: {
+        borderRadius: 50,
+    },
+    textLeft: {
+        textAlign: 'left'
     }
-}))
+}));
 
 export default function Login({ handleClose }) {
     const classes = useStyle();
@@ -57,6 +71,8 @@ export default function Login({ handleClose }) {
     const [psw, setPsw] = useState('');
     const [control, setControl] = useState(false);
     const [showPassword, setVisibility] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [data, setData] = useState({buttonText: '', title: '', request: ''});
 
     useEffect(() => {
         if (email !== '' && psw.length >= 8)
@@ -83,7 +99,20 @@ export default function Login({ handleClose }) {
             }).catch(err => {
                 snackOpenFun(err.response.data, 'info');
             });
-    }
+    };
+
+    const handleCloseDialog = () => {
+        setOpen(false);
+    };
+
+    const handleOpenDialog = () => {
+        setData({
+            buttonText: 'Modify',
+            title: 'Follow these steps in order to update your password',
+            request: 'changePassword'
+        });
+        setOpen(true);
+    };
 
     const buttonType = control === false ? { disabled: true } : { color: 'primary' };
 
@@ -91,7 +120,7 @@ export default function Login({ handleClose }) {
         <>
             <div className={classes.dialogStyle}>
                 <form onSubmit={login}>
-                    <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Login on My Library</b></DialogTitle>
+                    <DialogTitle className={classes.dialogTitle} id="form-dialog-title"><b>Login on My Library</b></DialogTitle>
                     <DialogContent>
                         <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
@@ -110,7 +139,7 @@ export default function Login({ handleClose }) {
                             </Grid>
                         </Grid>
                     </DialogContent>
-                    <DialogContent style={{ overflow: 'hidden' }}>
+                    <DialogContent className={classes.hiddenOverflow}>
                         <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
                                 <LockIcon color="disabled" />
@@ -140,18 +169,17 @@ export default function Login({ handleClose }) {
                             </Grid>
                         </Grid>
                     </DialogContent>
-                    <DialogContent style={{ textAlign: 'end' }}>
-                        <p className={classes.forgotPsw}><NavLink to="/" onClick={handleClose} className={classes.linkStyle}>Do you forgot your password?</NavLink></p>
-
+                    <DialogContent className={classes.textLeft}>
+                        <p className={classes.forgotPsw}><NavLink to="/" onClick={handleOpenDialog} className={classes.linkStyle}>Do you forgot your password?</NavLink></p>
                     </DialogContent>
                     <DialogActions className={classes.buttonSyle}>
-                        <Button style={{ borderRadius: 50 }} type="submit" size="medium" variant="contained" {...buttonType}>
+                        <Button className={classes.borderR} type="submit" size="medium" variant="contained" {...buttonType}>
                             Login with your email
-                    </Button>
+                        </Button>
                     </DialogActions>
                 </form>
             </div>
-
+            <DialogAccount request={data.request} buttonText={data.buttonText} title={data.title} handleClose={handleCloseDialog} open={open}/>
         </>
     )
 }

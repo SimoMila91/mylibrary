@@ -41,7 +41,7 @@ export const ContextProvider = props => {
 
     const snackOpenFun = (m, t) => {
         setSnackOpen({
-            open: true, 
+            open: true,
             message: m,
             type: t,
         });
@@ -71,7 +71,7 @@ export const ContextProvider = props => {
     const saveBooks = () => {
         if (books && books.length > 0) {
             localStorage.setItem('books', JSON.stringify(books));
-        } 
+        }
     };
 
     saveBooks();
@@ -116,4 +116,3 @@ export const ContextProvider = props => {
         </Context.Provider>
     );
 };
-

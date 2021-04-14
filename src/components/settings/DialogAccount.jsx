@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useContext,
+  useContext
 } from 'react';
 import {
   makeStyles,
@@ -84,12 +84,12 @@ export default function DialogAccount(props) {
     props.handleClose();
   };
 
-  const updateRequest = () => {
+  const updateRequest = (e) => {
+    e.preventDefault()
     const payload = {
       idUser: localStorage.getItem('idUser'),
       psw: psw
     };
-
     if (psw === checkPsw) {
       axios.put(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
       .then(res => {
@@ -103,12 +103,12 @@ export default function DialogAccount(props) {
     }
   }
 
-  const deleteAccount = () => {
+  const deleteAccount = (e) => {
+    e.preventDefault();
     const payload = {
       psw: psw,
       idUser: localStorage.getItem('idUser'),
     };
-
     axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
     .then(res => {
       console.log(res);
@@ -123,112 +123,109 @@ export default function DialogAccount(props) {
   const checkEmail = error.emailError !== undefined && error.emailError !== '' ? { helperText: `${error.emailError}`, error: true } : null;
   const checkAnswer = error.answerError !== undefined && error.answerError !== '' ? { helperText: `${error.answerError}`, error: true } : null;
 
-
-    return (
-      <div>
-        <Dialog open={props.open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-                {
-                  show.firstInputs ?
-                  <>
-                    <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-                    <form onSubmit={handleRequest}>
-                      <DialogContent>
-                        <div className={classes.inputStyle}>
-                          <TextField id="outlined-full-width" label="Insert your email" style={{
-                              margin: 8
-                            }} fullWidth value={email} onChange={e => setEmail(e.target.value)} margin="normal" InputLabelProps={{
-                              shrink: true
-                            }} variant="outlined"
-                            {...checkEmail}
-                            autoFocus
-                          />
-                          <TextField id="outlined-full-width" label="Who is your best friend?" style={{
-                              margin: 8
-                            }} fullWidth value={text} onChange={e => setText(e.target.value)} margin="normal" InputLabelProps={{
-                              shrink: true
-                            }} variant="outlined"
-                            {...checkAnswer}
-                          />
-                        </div>
-                      </DialogContent>
-                      <DialogActions className={classes.right}>
-                        <Button onClick={handleClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                        <Button {...controlButton} type="submit" variant="contained" autoFocus="autoFocus">
-                          Submit
-                        </Button>
-                      </DialogActions>
-                    </form>
-                  </>
-                : show.secondInputs && props.request.includes('changePassword') ?
+      return (
+        <div>
+          <Dialog open={props.open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                  {
+                    show.firstInputs ?
                     <>
-                    <DialogTitle id="psw">Change your password</DialogTitle>
-                    <form onSubmit={updateRequest}>
-                      <DialogContent>
-                        <div className={classes.inputStyle}>
-                          <TextField id="outlined-full-width" label="Your new password" style={{
-                              margin: 8
-                            }} fullWidth margin="normal" InputLabelProps={{
-                              shrink: true
-                            }} variant="outlined"
-                            helperText="Important: password must be greater than 8"
-                            value={psw}
-                            onChange={e => setPsw(e.target.value)}
-                            autoFocus
-                          />
-                        <TextField id="checkPsw" label="Retype your password" style={{
-                              margin: 8
-                            }} fullWidth margin="normal" InputLabelProps={{
-                              shrink: true
-                            }} variant="outlined"
-                            value={checkPsw}
-                            onChange={e => setCheckPsw(e.target.value)}
-                          />
-                        </div>
-                      </DialogContent>
-                      <DialogActions className={classes.right}>
-                        <Button onClick={handleClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                        <Button {...controlButtonTwo} type="submit" variant="contained" autoFocus="autoFocus">
-                          {props.buttonText}
-                        </Button>
-                      </DialogActions>
-                    </form>
+                      <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+                      <form onSubmit={handleRequest}>
+                        <DialogContent>
+                          <div className={classes.inputStyle}>
+                            <TextField id="outlined-full-width" label="Insert your email" style={{
+                                margin: 8
+                              }} fullWidth value={email} onChange={e => setEmail(e.target.value)} margin="normal" InputLabelProps={{
+                                shrink: true
+                              }} variant="outlined"
+                              {...checkEmail}
+                              autoFocus
+                            />
+                            <TextField id="outlined-full-width" label="Who is your best friend?" style={{
+                                margin: 8
+                              }} fullWidth value={text} onChange={e => setText(e.target.value)} margin="normal" InputLabelProps={{
+                                shrink: true
+                              }} variant="outlined"
+                              {...checkAnswer}
+                            />
+                          </div>
+                        </DialogContent>
+                        <DialogActions className={classes.right}>
+                          <Button onClick={handleClose} variant="contained" color="primary">
+                            Cancel
+                          </Button>
+                          <Button {...controlButton} type="submit" variant="contained" autoFocus="autoFocus">
+                            Submit
+                          </Button>
+                        </DialogActions>
+                      </form>
                     </>
-                  : show.secondInputs && props.request.includes('deleteAccount') ?
-                  <>
-                    <DialogTitle id="alert-dialog-title">Type your password in order to be able to delete your account</DialogTitle>
-                    <form onSubmit={deleteAccount}>
-                      <DialogContent>
-                        <div className={classes.inputStyle}>
-                          <TextField id="outlined-full-width" label="Type your password" style={{
-                              margin: 8
-                            }} fullWidth margin="normal" InputLabelProps={{
-                              shrink: true
-                            }} variant="outlined"
-                            value={psw}
-                            onChange={e => setPsw(e.target.value)}
-                            type="password"
-                          />
-                        </div>
-                      </DialogContent>
-                      <DialogActions className={classes.right}>
-                        <Button onClick={handleClose} variant="contained" color="primary">
-                          Cancel
-                        </Button>
-                        <Button {...controlButtonTwo} type="submit" variant="contained" autoFocus="autoFocus">
-                          {props.buttonText}
-                        </Button>
-                      </DialogActions>
-                    </form>
-                  </>
-                :
-                  null
-                }
-        </Dialog>
-      </div>
-    )
-
+                  : show.secondInputs && props.request.includes('changePassword') ?
+                      <>
+                      <DialogTitle id="psw">Change your password</DialogTitle>
+                      <form onSubmit={updateRequest}>
+                        <DialogContent>
+                          <div className={classes.inputStyle}>
+                            <TextField id="outlined-full-width" label="Your new password" style={{
+                                margin: 8
+                              }} fullWidth margin="normal" InputLabelProps={{
+                                shrink: true
+                              }} variant="outlined"
+                              helperText="Important: password must be greater than 8"
+                              value={psw}
+                              onChange={e => setPsw(e.target.value)}
+                              autoFocus
+                            />
+                          <TextField id="checkPsw" label="Retype your password" style={{
+                                margin: 8
+                              }} fullWidth margin="normal" InputLabelProps={{
+                                shrink: true
+                              }} variant="outlined"
+                              value={checkPsw}
+                              onChange={e => setCheckPsw(e.target.value)}
+                            />
+                          </div>
+                        </DialogContent>
+                        <DialogActions className={classes.right}>
+                          <Button onClick={handleClose} variant="contained" color="primary">
+                            Cancel
+                          </Button>
+                          <Button {...controlButtonTwo} type="submit" variant="contained" autoFocus="autoFocus">
+                            {props.buttonText}
+                          </Button>
+                        </DialogActions>
+                      </form>
+                      </>
+                    : show.secondInputs && props.request.includes('deleteAccount') ?
+                    <>
+                      <DialogTitle id="alert-dialog-title">Type your password in order to be able to delete your account</DialogTitle>
+                      <form onSubmit={deleteAccount}>
+                        <DialogContent>
+                          <div className={classes.inputStyle}>
+                            <TextField id="outlined-full-width" label="Type your password" style={{
+                                margin: 8
+                              }} fullWidth margin="normal" InputLabelProps={{
+                                shrink: true
+                              }} variant="outlined"
+                              value={psw}
+                              onChange={e => setPsw(e.target.value)}
+                              type="password"
+                            />
+                          </div>
+                        </DialogContent>
+                        <DialogActions className={classes.right}>
+                          <Button onClick={handleClose} variant="contained" color="primary">
+                            Cancel
+                          </Button>
+                          <Button {...controlButtonTwo} type="submit" variant="contained" autoFocus="autoFocus">
+                            {props.buttonText}
+                          </Button>
+                        </DialogActions>
+                      </form>
+                    </>
+                  : null
+                  }
+          </Dialog>
+        </div>
+      )
 }
