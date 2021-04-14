@@ -12,7 +12,6 @@ import {
   TextField
 } from '@material-ui/core';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
 import { Context } from '../../context/Context';
 
 const useStyles = makeStyles(theme => ({
@@ -45,7 +44,6 @@ export default function DialogAccount(props) {
   const [show, setShow] = useState(showInitialSettings);
   const [psw, setPsw] = useState('');
   const [checkPsw, setCheckPsw] = useState('');
-  const [redirect, setRedirect] = useState(false);
 
   const handleRequest = (e) => {
     e.preventDefault();
@@ -96,7 +94,6 @@ export default function DialogAccount(props) {
       axios.put(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
       .then(res => {
         console.log(res);
-        setRedirect(true);
         props.handleClose();
       }).catch(err => {
         console.log(err.response.data);
@@ -115,7 +112,6 @@ export default function DialogAccount(props) {
     axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
     .then(res => {
       console.log(res);
-      setRedirect(true);
       props.handleClose();
     }).catch(err => {
       console.log(err);
