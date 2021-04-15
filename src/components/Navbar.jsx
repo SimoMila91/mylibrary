@@ -184,14 +184,15 @@ function ScrollTop(props) {
 
 export default function Navbar(props) {
   const classes = useStyles();
-
   const {
     loggedIn,
     handleOpenForm,
     open,
-    handleCloseForm
+    handleCloseForm,
+    selectedForm,
+    setForm
   } = useContext(Context);
-  const [selectedForm, setForm] = useState('Login');
+  
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorElMenu, setAnchorElMenu] = useState(null);
   const openmenu = Boolean(anchorEl);

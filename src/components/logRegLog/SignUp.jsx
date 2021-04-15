@@ -71,6 +71,19 @@ const useStyle = makeStyles((theme) => ({
   marginZero: {
     margin: 0,
   },
+  title: {
+    textAlign: 'center',
+    marginTop: '8%'
+  },
+  overHid: {
+    overflow: 'hidden'
+  },
+  padZero: {
+    padding: 0,
+  },
+  bRadius: {
+    borderRadius: 50
+  }
 }));
 
 export default function Login({
@@ -84,7 +97,8 @@ export default function Login({
   const [control, setControl] = useState(false);
   const [showPassword, setVisibility] = useState(false);
   const {
-    snackOpenFun
+    snackOpenFun,
+    setForm
   } = useContext(Context);
 
   const controlEmail = (email) => {
@@ -112,6 +126,7 @@ export default function Login({
     axios.post("https://my-library-backend-italy.herokuapp.com/signup", payload)
       .then(res => {
         snackOpenFun(res.data, 'success');
+        setForm('Login');
         handleClose();
       }).catch((err) => {
         console.log(err.response);
@@ -139,7 +154,7 @@ export default function Login({
     <>
             <div className={classes.dialogStyle}>
                 <form action="post" onSubmit={signup}>
-                    <DialogTitle style={{ textAlign: 'center', marginTop: '8%' }} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
+                    <DialogTitle className={classes.title} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
                     <DialogContent>
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
@@ -177,12 +192,12 @@ export default function Login({
                             </Grid>
                         </Grid>
                     </DialogContent>
-                    <DialogContent style={{ overflow: 'hidden' }}>
+                    <DialogContent className={classes.overHid}>
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
                                 <LockIcon color="disabled" />
                             </Grid>
-                            <Grid item style={{ paddingTop: 0 }}>
+                            <Grid item className={classes.padZero}>
                                 <FormControl {...passwordControl}>
                                     <InputLabel>Password</InputLabel>
                                     <Input
@@ -234,7 +249,7 @@ export default function Login({
                         </Grid>
                     </DialogContent>
                     <DialogActions className={classes.buttonStyle}>
-                        <Button type="submit" style={{ borderRadius: 50 }} size="medium" variant="contained" {...buttonType}>
+                        <Button type="submit" className={classes.bRadius} size="medium" variant="contained" {...buttonType}>
                             Signup with your email
                         </Button>
                     </DialogActions>

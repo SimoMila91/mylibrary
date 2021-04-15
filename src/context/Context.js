@@ -17,6 +17,7 @@ export const ContextProvider = props => {
     const [filterGenre, setFilterGenre] = useState('');
     const [language, setLanguage] = useState('it');
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token'));
+    const [selectedForm, setForm] = useState('Login');
 
     const handleFilterGenreChange = e => {
         const { value } = e.target;
@@ -110,6 +111,8 @@ export const ContextProvider = props => {
                 handleOpenForm,
                 open,
                 handleCloseForm,
+                selectedForm,
+                setForm
             }}
         >
             {props.children}
