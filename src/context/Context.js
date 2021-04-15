@@ -32,6 +32,7 @@ export const ContextProvider = props => {
     };
 
     const handleCloseForm = () => {
+        setForm('Login');
         setOpen(false);
     };
 
