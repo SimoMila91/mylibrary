@@ -2,7 +2,7 @@ import { Container, Divider, makeStyles, Grid, Link } from '@material-ui/core';
 import React from 'react';
 import google from '../images/google.svg';
 import logoS2I from '../images/logoS2I.png';
-import react from '../images/react.svg';
+import react from '../images/unDraw/react.svg';
 import nodejs from '../images/nodejs.svg';
 import sql from '../images/sql-server.svg';
 import material from '../images/material.png';
