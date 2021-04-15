@@ -67,9 +67,11 @@ const useStyle = makeStyles((theme) => ({
   },
   marginZero: {
     margin: 0,
+    fontSize: 15,
     [theme.breakpoints.down('xs')]: {
       fontSize: 14,
-    }
+    },
+    color: 'brown'
   },
   title: {
     textAlign: 'center',
