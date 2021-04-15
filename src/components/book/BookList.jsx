@@ -288,8 +288,8 @@ export default function BookList({
                       </Typography>
                       {
                         book.volumeInfo.authors !== undefined
-                          ? truncateString(book.volumeInfo.authors.join(' - '), 30)
-                          : "Author anavailable"
+                          ? " " + truncateString(book.volumeInfo.authors.join(' - '), 30)
+                          : " Author anavailable"
                       }
                     </Typography>
                     <Typography component="p" variant="subtitle1" color="textSecondary">
@@ -299,15 +299,15 @@ export default function BookList({
                             </Typography>
                           : ''
                       }
-                      {book.volumeInfo.publisher}
+                      {book.volumeInfo.publisher ?  " " + book.volumeInfo.publisher : null}
                     </Typography>
                     <Typography component="p" variant="subtitle2" color="textSecondary">
                       <Typography component="span" variant="subtitle2" display="inline" color="textPrimary">Publish Date:
                       </Typography>
                       {
                         book.volumeInfo.publishedDate !== undefined
-                          ? book.volumeInfo.publishedDate.slice(0, 4)
-                          : "0000"
+                          ? " " + book.volumeInfo.publishedDate.slice(0, 4)
+                          : " 0000"
                       }
                     </Typography>
                   </div>

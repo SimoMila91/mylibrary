@@ -86,7 +86,9 @@ export default function Reviews({
   const [show, setShow] = useState(false);
   const {
     books,
-    snackOpenFun
+    snackOpenFun,
+    loggedIn,
+    handleOpenForm,
   } = useContext(Context);
 
   const request = useCallback(() => {
@@ -145,6 +147,20 @@ export default function Reviews({
     }).catch(err => console.log(err));
   };
 
+  const handleWrite = (e) => {
+    e.preventDefault();
+    if (loggedIn) {
+      if (show) {
+        setShow(false);
+      } else {
+        setShow(true);
+      }
+    } else {
+      snackOpenFun('You first need to login', 'info');
+      handleOpenForm();
+    };
+  }
+
   const showButton = text.length < 2 ? {
       disabled: true
     } :
@@ -153,10 +169,7 @@ export default function Reviews({
     <h2>Reviews...</h2>
     <div className={classes.flexDiv}>
       <p className={classes.p}>Write your personal review</p>
-      <IconButton onClick={(
-          ) => show
-          ? setShow(false)
-          : setShow(true)}>
+      <IconButton onClick={handleWrite}>
         <CreateIcon/>
       </IconButton>
     </div>
@@ -171,7 +184,7 @@ export default function Reviews({
                       classes: {
                         input: classes.resize
                       }
-                    }} className={classes.textfieldStyle} placeholder="What i think.." type="text" value={text} multiline="multiline" margin="dense" rows={5} fullWidth="fullWidth" onChange={(e) => setText(e.target.value)}/>
+                    }} className={classes.textfieldStyle} placeholder="What i think.." type="text" value={text} multiline margin="dense" rows={5} fullWidth onChange={(e) => setText(e.target.value)}/>
                   <Button type="submit" className={classes.buttonStyle} size="medium" variant="contained" endIcon={<SendIcon />} {...showButton}>
                     Send
                   </Button>
@@ -198,8 +211,7 @@ export default function Reviews({
                   {r.review}
                 </p>
                 <p className={classes.textLeft + " " + classes.timeagoStyle}>
-                  <em>posted
-                    <TimeAgo date={r.date} unite="minute"/></em>
+                  <em>posted <TimeAgo date={new Date(r.date)} unite="minute"/></em>
                 </p>
               </Grid>
             </Grid>
