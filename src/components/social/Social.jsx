@@ -3,6 +3,7 @@ import { IconButton, makeStyles } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,6 +37,9 @@ export default function Social() {
                     </IconButton>
                 <IconButton aria-controls="menu-appbar" aria-haspopup="true" color="inherit">
                     <InstagramIcon />
+                </IconButton>
+                <IconButton aria-controls="menu-appbar" aria-haspopup="true" color="inherit">
+                    <LinkedInIcon />
                 </IconButton>
             </div>
         </div>

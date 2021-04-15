@@ -4,7 +4,7 @@ import google from '../images/google.svg';
 import logoS2I from '../images/logoS2I.png';
 import react from '../images/unDraw/react.svg';
 import nodejs from '../images/nodejs.svg';
-import sql from '../images/sql-server.svg';
+import sql from '../images/sql-server.png';
 import material from '../images/material.png';
 import newsapi from '../images/news.png';
 import Social from '../components/social/Social';
@@ -78,10 +78,10 @@ export default function Footer() {
                         <Link href="https://developers.google.com/books" target="_blank"><img className={classes.heightOne} src={google} alt="Google logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <Link href="https://reactjs.org/" target="_blank"><img className={classes.heightOne} src={react} alt="React logo"/></Link>
+                        <Link href="https://nodejs.org/en/" target="_blank"><img className={classes.heightOne} src={nodejs} alt="Nodejs logo"/></Link>
                     </Grid>
                     <Grid item>
-                        <Link href="https://nodejs.org/en/" target="_blank"><img className={classes.heightOne} src={nodejs} alt="Nodejs logo"/></Link>
+                        <Link href="https://reactjs.org/" target="_blank"><img className={classes.heightOne} src={react} alt="React logo"/></Link>
                     </Grid>
                     <Grid item>
                         <Link href="https://www.phpmyadmin.net/" target="_blank"><img className={classes.heightOne} src={sql} alt="Sql server logo"/></Link>
