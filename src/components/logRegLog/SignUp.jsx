@@ -54,9 +54,6 @@ const useStyle = makeStyles((theme) => ({
     justifyContent: 'center',
     paddingTop: 50,
   },
-  forgotPsw: {
-    fontSize: 13,
-  },
   linkStyle: {
     textDecoration: 'none',
     color: 'green',
@@ -70,10 +67,13 @@ const useStyle = makeStyles((theme) => ({
   },
   marginZero: {
     margin: 0,
+    [theme.breakpoints.down('xs')]: {
+      fontSize: 14,
+    }
   },
   title: {
     textAlign: 'center',
-    marginTop: '8%'
+    marginTop: '8%',
   },
   overHid: {
     overflow: 'hidden'
@@ -82,7 +82,11 @@ const useStyle = makeStyles((theme) => ({
     padding: 0,
   },
   bRadius: {
-    borderRadius: 50
+    borderRadius: 50,
+    padding: 10,
+  },
+  padOver: {
+    overflow: 'initial',
   }
 }));
 
@@ -155,7 +159,7 @@ export default function Login({
             <div className={classes.dialogStyle}>
                 <form action="post" onSubmit={signup}>
                     <DialogTitle className={classes.title} id="form-dialog-title"><b>Signup on My Library</b></DialogTitle>
-                    <DialogContent>
+                    <DialogContent className={classes.padOver}>
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
                                 <PersonIcon color="disabled" />
@@ -192,7 +196,7 @@ export default function Login({
                             </Grid>
                         </Grid>
                     </DialogContent>
-                    <DialogContent className={classes.overHid}>
+                    <DialogContent className={classes.overHid + " " + classes.padOver}>
                         <Grid container spacing={2} alignItems="flex-end">
                             <Grid item>
                                 <LockIcon color="disabled" />

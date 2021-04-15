@@ -119,14 +119,18 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 5,
     textAlign: 'center',
   },
-  btnForm: {
-    textDecoration: 'none',
-    color: '#007bff',
-  },
   btnPad: {
     [theme.breakpoints.down('xs')]: {
       padding: 4,
     }
+  },
+  switchText: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14,
+    }
+  },
+  paperStyle: {
+    margin: 0
   }
 }));
 
@@ -226,9 +230,9 @@ export default function Navbar(props) {
         <div>
           <SignUp handleClose={handleCloseForm} className={classes.formStyle} />
           <DialogContent className={classes.dialogForm}>
-            <DialogContentText>
+            <DialogContentText className={classes.switchText}>
               Do you have an account?
-              <Link href="#" className={classes.btnForm} onClick={formChange}> Login</Link>
+              <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Login</Link>
             </DialogContentText>
           </DialogContent>
         </div>
@@ -238,9 +242,9 @@ export default function Navbar(props) {
         <div>
           <Login handleClose={handleCloseForm} />
           <DialogContent className={classes.dialogForm}>
-            <DialogContentText>
+            <DialogContentText className={classes.switchText}>
               Don't you have an account?
-              <Link href="#" className={classes.btnForm} onClick={formChange}> Signup</Link>
+              <Link href="#" style={{textDecoration: 'none', color: '#007bff'}} onClick={formChange}> Signup</Link>
             </DialogContentText>
           </DialogContent>
         </div>
@@ -365,6 +369,9 @@ export default function Navbar(props) {
                                     open={open}
                                     onClose={handleCloseForm}
                                     aria-labelledby="form-dialog-title"
+                                    classes={{
+                                      paper: classes.paperStyle
+                                    }}
                                 >
                                     <IconButton
                                         color="inherit"
