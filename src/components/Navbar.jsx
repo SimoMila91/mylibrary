@@ -265,19 +265,19 @@ export default function Navbar(props) {
                 <ListItemIcon>
                     <HomeIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Home" className={classes.linkStyle} />
+                <ListItemText primary="Home" />
             </MenuItem>
             <MenuItem  component={NavLink} to="/search" onClick={handleClose}>
                 <ListItemIcon>
                     <SearchIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Books" className={classes.linkStyle} />
+                <ListItemText primary="Books" />
             </MenuItem>
             <MenuItem component={NavLink} to="/articles" onClick={handleClose}>
                 <ListItemIcon>
                     <LocalLibraryIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Articles" className={classes.linkStyle} />
+                <ListItemText primary="Articles" />
             </MenuItem>
             <MenuItem component={NavLink} to="/faq" onClick={handleClose}>
                 <ListItemIcon>
@@ -305,19 +305,19 @@ export default function Navbar(props) {
                 <IconButton>
                     <FaceIcon fontSize="small" />
                 </IconButton>
-                <ListItemText primary="My page" className={classes.linkStyle} />
+                <ListItemText primary="My page" />
             </MenuItem>
             <MenuItem component={NavLink} to="/settings" onClick={handleMenuClose}>
                 <IconButton>
                     <SettingsIcon fontSize="small" />
                 </IconButton>
-                <ListItemText primary="Settings" className={classes.linkStyle} />
+                <ListItemText primary="Settings" />
             </MenuItem>
             <MenuItem component={NavLink} to="/logout" onClick={handleMenuClose}>
                 <IconButton>
                     <ExitToAppIcon fontSize="small" />
                 </IconButton>
-                <ListItemText primary="Logout" className={classes.linkStyle} />
+                <ListItemText primary="Logout" />
             </MenuItem>
         </StyledMenu>
   );

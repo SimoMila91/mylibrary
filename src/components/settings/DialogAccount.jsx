@@ -24,6 +24,11 @@ const useStyles = makeStyles(theme => ({
       flexFlow: 'column',
     },
   },
+  marginTextfield: {
+    [theme.breakpoints.up('md')]: {
+      margin: 8,
+    },
+  }
 }));
 
 export default function DialogAccount(props) {
@@ -133,20 +138,19 @@ export default function DialogAccount(props) {
                       <form onSubmit={handleRequest}>
                         <DialogContent>
                           <div className={classes.inputStyle}>
-                            <TextField id="outlined-full-width" label="Insert your email" style={{
-                                margin: 8
-                              }} fullWidth value={email} onChange={e => setEmail(e.target.value)} margin="normal" InputLabelProps={{
+                            <TextField id="outlined-full-width" label="Insert your email"
+                              fullWidth value={email} onChange={e => setEmail(e.target.value)} margin="normal" InputLabelProps={{
                                 shrink: true
                               }} variant="outlined"
                               {...checkEmail}
-                              autoFocus
+                              className={classes.marginTextfield}
                             />
-                            <TextField id="outlined-full-width" label="Who is your best friend?" style={{
-                                margin: 8
-                              }} fullWidth value={text} onChange={e => setText(e.target.value)} margin="normal" InputLabelProps={{
+                            <TextField id="outlined-full-width" label="Who is your best friend?"
+                              fullWidth value={text} onChange={e => setText(e.target.value)} margin="normal" InputLabelProps={{
                                 shrink: true
                               }} variant="outlined"
                               {...checkAnswer}
+                              className={classes.marginTextfield}
                             />
                           </div>
                         </DialogContent>
@@ -166,23 +170,24 @@ export default function DialogAccount(props) {
                       <form onSubmit={updateRequest}>
                         <DialogContent>
                           <div className={classes.inputStyle}>
-                            <TextField id="outlined-full-width" label="Your new password" style={{
-                                margin: 8
-                              }} fullWidth margin="normal" InputLabelProps={{
+                            <TextField id="outlined-full-width" label="Your new password"
+                              fullWidth margin="normal" InputLabelProps={{
                                 shrink: true
                               }} variant="outlined"
-                              helperText="Important: password must be greater than 8"
+                              type='password'
+                              helperText="must be greater than 8"
                               value={psw}
                               onChange={e => setPsw(e.target.value)}
-                              autoFocus
+                              className={classes.marginTextfield}
                             />
-                          <TextField id="checkPsw" label="Retype your password" style={{
-                                margin: 8
-                              }} fullWidth margin="normal" InputLabelProps={{
+                          <TextField id="checkPsw" label="Retype your password"
+                              fullWidth margin="normal" InputLabelProps={{
                                 shrink: true
                               }} variant="outlined"
+                              type='password'
                               value={checkPsw}
                               onChange={e => setCheckPsw(e.target.value)}
+                              className={classes.marginTextfield}
                             />
                           </div>
                         </DialogContent>
@@ -210,6 +215,7 @@ export default function DialogAccount(props) {
                               value={psw}
                               onChange={e => setPsw(e.target.value)}
                               type="password"
+                              className={classes.marginTextfield}
                             />
                           </div>
                         </DialogContent>

@@ -22,6 +22,7 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Link
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -57,18 +58,23 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3)
   },
   paperStyle: {
-    height: 200,
     width: 140,
     position: 'relative'
   },
   paperWidth: {
-    width: 250,
-    padding: '1%',
-    paddingTop: '2%'
+    width: '100%',
+    display: 'flex',
+    [theme.breakpoints.down('xs')]: {
+      flexFlow: 'column',
+      textAlign: 'center'
+    },
   },
   imgStyle: {
     height: 200,
-    width: 140
+    width: 140,
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: '3%',
+    },
   },
   pad: {
     [theme.breakpoints.down('sm')]: {
@@ -112,11 +118,6 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'fantasy',
     paddingLeft: '2%'
   },
-  gridPaper: {
-    justifyContent: 'center',
-    display: 'flex',
-    position: 'relative'
-  },
   listSize: {
     fontSize: 15
   },
@@ -134,6 +135,9 @@ const useStyles = makeStyles((theme) => ({
   },
   titleSize: {
     fontSize: 18,
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: '6%',
+    },
   },
   searchStyle: {
     margin: 8,
@@ -147,9 +151,31 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end !important',
   },
   checkmoreButton: {
-    position: 'absolute',
-    bottom: 5,
-    right: 5,
+    [theme.breakpoints.up('sm')]: {
+      position: 'absolute',
+      bottom: 5,
+      right: 5
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: '3%',
+    },
+  },
+  contentPaper: {
+    [theme.breakpoints.up('sm')]: {
+      position: 'absolute',
+      bottom: '10%'
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: '3%',
+    }
+  },
+  linkStyle: {
+    "&:hover": {
+        textDecoration: 'none',
+    },
+  },
+  padContents: {
+    padding: '2%'
   }
 }));
 
@@ -218,7 +244,7 @@ export default function PersonalPage() {
   };
 
   useEffect(() => {
-    const res = books.filter(o => o.title.toLowerCase().includes(input));
+    const res = books.filter(o => o.title.toLowerCase().includes(input.toLowerCase().trim()));
     setResults(res);
   }, [input, books]);
 
@@ -333,42 +359,54 @@ export default function PersonalPage() {
         {
           results.length !== 0 || books.length !== 0
             ? results.map((book, i) => (
-              <Grid item key={i} xs={12} md={6} xl={3} className={classes.gridPaper}>
-              <Paper className={classes.paperStyle} elevation={2}>
-                <img className={classes.imgStyle} src={book.linkImage
-                    ? book.linkImage
-                    : `${voidImg}`} alt={book.title}/>
-              </Paper>
-              <Paper className={classes.paperStyle + " " + classes.paperWidth}>
-                <div>
-                  <IconButton className={classes.deleteButton} onClick={e => handleClickOpen(i)}>
-                    <DeleteIcon/>
-                  </IconButton>
-                </div>
-                <Typography variant="h6" className={classes.titleSize} component="p">{truncateString(book.title, 21)}</Typography>
-                <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Author: </Typography>
-                  {
-                    book.author
-                      ? truncateString(book.author, 21)
-                      : "Author anavailable"
-                  }
-                </Typography>
-                <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Genre: </Typography>
-                  {book.genre}
-                </Typography>
-                <Typography component="p" variant="subtitle1" className={classes.listSize}>
-                  <Typography component="span" display="inline" variant="subtitle2">Published: </Typography>
-                  {book.publish_date}
-                </Typography>
-                <div className={classes.checkmoreButton}>
-                  <Button size="small" onClick={handleClose} color="primary" variant="outlined">
-                    check more
-                  </Button>
-                </div>
-              </Paper>
-            </Grid>))
+              <Grid item key={i} xs={12} lg={6} xl={3}>
+                <Paper className={classes.paperStyle + " " + classes.paperWidth}>
+                  <div>
+                    <img className={classes.imgStyle} src={book.linkImage
+                        ? book.linkImage
+                        : `${voidImg}`} alt={book.title}/>
+                  </div>
+                  <div>
+                    <IconButton className={classes.deleteButton} onClick={e => handleClickOpen(i)}>
+                      <DeleteIcon/>
+                    </IconButton>
+                  </div>
+                  <div className={classes.padContents}>
+                    <Typography variant="h6" className={classes.titleSize} component="p">{truncateString(book.title, 21)}</Typography>
+                      <div className={classes.contentPaper}>
+                          <Typography component="p" variant="subtitle1" className={classes.listSize}>
+                            <Typography component="span" display="inline" variant="subtitle2">Author: </Typography>
+                            {
+                              book.author
+                                ? truncateString(book.author, 21)
+                                : "Author anavailable"
+                            }
+                          </Typography>
+                          <Typography component="p" variant="subtitle1" className={classes.listSize}>
+                            <Typography component="span" display="inline" variant="subtitle2">Genre: </Typography>
+                            {book.genre}
+                          </Typography>
+                          <Typography component="p" variant="subtitle1" className={classes.listSize}>
+                            <Typography component="span" display="inline" variant="subtitle2">Published: </Typography>
+                            {book.publish_date}
+                          </Typography>
+                        </div>
+                  </div>
+
+
+                    <div className={classes.checkmoreButton}>
+                      <Button size="small" onClick={handleClose} color="primary" variant="outlined">
+                        <Link
+                            href={book.linkBuy ? book.linkBuy : null}
+                            target="_blank"
+                            className={classes.linkStyle}
+                        >
+                            Check more
+                        </Link>
+                      </Button>
+                    </div>
+                </Paper>
+              </Grid>))
             : preRender()
         }
         {
