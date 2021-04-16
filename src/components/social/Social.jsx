@@ -21,7 +21,10 @@ const useStyles = makeStyles(theme => ({
         margin: 'auto',
     },
     linkColor: {
-        color: 'inherit'
+        color: 'inherit',
+        '&:hover': {
+            color: 'inherit',
+        }
     }
 }));
 
