@@ -22,7 +22,9 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  Link
+  Link,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -33,6 +35,7 @@ import axios from 'axios';
 import voidImg from '../../images/unDraw/void.svg';
 import nofound from '../../images/unDraw/nofound.svg';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {
   Context
 } from '../../context/Context';
@@ -191,6 +194,8 @@ const truncateString = (str, n) => {
 export default function PersonalPage() {
   const classes = useStyles();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const isMenuOpen = Boolean(anchorEl);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [books, setBooks] = useState([]);
   const [results, setResults] = useState([]);
@@ -202,6 +207,7 @@ export default function PersonalPage() {
     author: '',
     idBook: '',
   };
+  const [id, setId] = useState(-1);
   const [open, setOpen] = useState(initialState);
   const {
     snackOpenFun
@@ -273,6 +279,46 @@ export default function PersonalPage() {
       request();
     }).catch(err => console.log(err));
   };
+
+  const handleChangeType = (e, i) => {
+    setId(i);
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = (e) => {
+    console.log(e.currentTarget.textContent.slice(2));
+    const payload = {
+      idBook: results[id].idBook,
+      type: e.currentTarget.textContent.slice(2),
+      idUser: localStorage.getItem('idUser')
+    };
+    axios.put("https://my-library-backend-italy.herokuapp.com/updateType", payload)
+    .then(res => {
+      snackOpenFun(res.data, 'success');
+      setAnchorEl(null);
+      request();
+    }).catch(err => console.log(err));
+  };
+
+  const menuId = 'primary-search-type-menu';
+  const renderMenu = (
+    <Menu anchorEl={anchorEl} anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }} id={menuId} keepMounted transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }} open={isMenuOpen} onClose={() => setAnchorEl(null)}
+    >
+    {
+      selectedIndex === 1 ?
+      <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
+      : selectedIndex === 2 ?
+      <MenuItem onClick={handleMenuClose}>+ To Read</MenuItem>
+      : null
+    }
+    </Menu>
+  );
 
   const preRender = () => {
     if (message !== '') {
@@ -367,10 +413,18 @@ export default function PersonalPage() {
                   <div>
                     <img className={classes.imgStyle} src={book.linkImage
                         ? book.linkImage
-                        : `${voidImg}`} alt={book.title}/>
+                        : `${voidImg}`} alt={book.title}
+                    />
                   </div>
-                  <div>
-                    <IconButton className={classes.deleteButton} onClick={e => handleClickOpen(i)}>
+                  <div className={classes.deleteButton}>
+                    {
+                      selectedIndex === 1 || selectedIndex === 2 ?
+                        <IconButton aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleChangeType(e, i)} color="inherit" style={{paddingRight: 0}}>
+                          <MoreVertIcon/>
+                        </IconButton>
+                      : <MoreVertIcon  style={{color: 'grey'}}/>
+                    }
+                    <IconButton onClick={e => handleClickOpen(i)} style={{color: '#f44336'}}>
                       <DeleteIcon/>
                     </IconButton>
                   </div>
@@ -395,19 +449,17 @@ export default function PersonalPage() {
                           </Typography>
                         </div>
                   </div>
-
-
-                    <div className={classes.checkmoreButton}>
-                      <Button size="small" onClick={handleClose} color="primary" variant="outlined">
-                        <Link
-                            href={book.linkBuy ? book.linkBuy : null}
-                            target="_blank"
-                            className={classes.linkStyle}
-                        >
-                            Check more
-                        </Link>
-                      </Button>
-                    </div>
+                  <div className={classes.checkmoreButton}>
+                    <Button size="small" onClick={handleClose} color="primary" variant="outlined">
+                      <Link
+                          href={book.linkBuy ? book.linkBuy : null}
+                          target="_blank"
+                          className={classes.linkStyle}
+                      >
+                          Check more
+                      </Link>
+                    </Button>
+                  </div>
                 </Paper>
               </Grid>))
             : preRender()
@@ -425,6 +477,7 @@ export default function PersonalPage() {
   </Grid>
   {renderDialog()}
   </Container>
+  {renderMenu}
   </>
   )
 };
