@@ -244,7 +244,10 @@ export default function PersonalPage() {
   };
 
   useEffect(() => {
-    const res = books.filter(o => o.title.toLowerCase().includes(input.toLowerCase().trim()));
+    const res = books.filter(o => o.title.toLowerCase().includes(input.toLowerCase().trim())
+      || o.author.toLowerCase().includes(input.toLowerCase().trim())
+      || o.genre.toLowerCase().includes(input.toLowerCase().trim()))
+    ;
     setResults(res);
   }, [input, books]);
 
