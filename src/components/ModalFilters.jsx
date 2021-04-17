@@ -23,7 +23,7 @@ export default function ModalFilters({ handleClose, onClose }) {
     const classes = useStyles();
 
     const [age, setAge] = useState(Context.age);
-    // context functions 
+    // context functions
     const { handleChangeAge, handleChangeType,
         type, filterGenre, handleFilterGenreChange,
         language, handleChangeLang,
@@ -72,9 +72,12 @@ export default function ModalFilters({ handleClose, onClose }) {
                             native
                             onChange={e => handleChangeType(e)}
                         >
-                            <option value='' >Paid ebook</option>>
+                            >
+                            <option aria-label="none" value="" />
                             <option value="free-ebooks">Free ebooks</option>
                             <option value="ebooks">All ebooks</option>
+                            <option value='paid-ebooks'>Paid ebook</option>
+
                         </Select>
                     </FormControl>
                     <FormControl className={classes.formControl}>

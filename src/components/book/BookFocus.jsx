@@ -28,16 +28,24 @@ const useStyles = makeStyles(theme => ({
     top: 6,
   },
   titleMobile: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 19,
+      marginRight: '4%',
+    },
     [theme.breakpoints.down('xs')]: {
       fontSize: 16,
-      maxWidth: '12rem',
+      textAlign: 'center',
+      margin: 'auto',
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       fontSize: 20,
     },
     [theme.breakpoints.up('lg')]: {
       fontSize: 24,
     },
+  },
+  padTitle: {
+    paddingRight: '3%',
   },
   respImg: {
     [theme.breakpoints.up('xs')]: {
@@ -96,9 +104,11 @@ export default function BookFocus({
                       open={onOpen}
                     >
                         <DialogTitle disableTypography>
-                          <Typography className={classes.titleMobile} variant="h4">
-                            {book.volumeInfo.title}
-                          </Typography>
+                          <div className={classes.padTitle}>
+                            <Typography className={classes.titleMobile} variant="h4">
+                              {book.volumeInfo.title}
+                            </Typography>
+                          </div>
                           <IconButton className={classes.closeButton} aria-label="close" onClick={onClose}>
                             <CloseIcon />
                             </IconButton>
@@ -109,6 +119,7 @@ export default function BookFocus({
                                 <div className={classes.mainInfo}>
                                     <ul style={{ display: 'grid' }}>
                                         <li>{book.volumeInfo.authors !== undefined ? book.volumeInfo.authors.join(' - ') : <em style={{ color: 'grey' }}>Author anavailable</em>}</li>
+                                        <li>{book.volumeInfo.categories !== undefined ? "Genre - " + book.volumeInfo.categories : <em style={{ color: 'grey' }}>Genre anavailable</em> }</li>
                                         {book.volumeInfo.publisher ? <li> {book.volumeInfo.publisher} </li> : null}
                                         <li>{book.volumeInfo.publishedDate !== undefined ? book.volumeInfo.publishedDate.slice(0, 4) : "0000"}</li>
                                         <li>
