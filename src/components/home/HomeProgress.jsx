@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Button, Paper, Grid, Select, MenuItem, 
-        FormControl, InputLabel,Typography, Link 
+import { Button, Paper, Grid, Select, MenuItem,
+        FormControl, InputLabel,Typography, Link
 } from '@material-ui/core';
 import Carousel from 'react-material-ui-carousel';
 import { makeStyles } from '@material-ui/core/styles';
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     titleStyle: {
-        margin: "auto", 
+        margin: "auto",
         fontSize: 22,
     },
     marginAuto: {
@@ -110,10 +110,10 @@ export default function HomeProgress({ news }) {
                                         elevation={10}
                                     >
                                         <h2 className={classes.titleStyle}>{news.volumeInfo.title}</h2>
-                                        <img className={classes.marginAuto} src={news.volumeInfo.imageLinks.thumbnail} alt={news.volumeInfo.title} />
+                                        <img className={classes.marginAuto} src={news.volumeInfo.imageLinks.thumbnail.replace('http', 'https')} alt={news.volumeInfo.title} />
                                         <Button size="small" className={classes.checkButton}>
-                                            <Link 
-                                                href={news.volumeInfo.canonicalVolumeLink ? news.volumeInfo.canonicalVolumeLink : null} 
+                                            <Link
+                                                href={news.volumeInfo.canonicalVolumeLink ? news.volumeInfo.canonicalVolumeLink : null}
                                                 target="_blank"
                                                 className={classes.linkStyle}
                                             >

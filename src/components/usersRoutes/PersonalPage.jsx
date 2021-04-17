@@ -285,16 +285,15 @@ export default function PersonalPage() {
       }).then(res => {
         handleClose();
         snackOpenFun(res.data, 'success');
-        request();
       }).catch(err => console.log(err));
     } else {
       axios.put(`https://my-library-backend-italy.herokuapp.com/${request}`, data)
         .then(res => {
           handleClose();
           snackOpenFun(res.data, 'success');
-          request();
         }).catch(err => console.log(err));
     };
+    request();
   };
 
   const handleChangeType = (e, i) => {
