@@ -267,11 +267,19 @@ export default function PersonalPage() {
   };
 
   const handleDelete = () => {
+    let request;
+    if (selectedIndex === 0) {
+      request = 'deleteBook';
+    } else if (selectedIndex === 2 || selectedIndex === 1) {
+      request = 'typeDefault';
+    } else {
+      request = 'updateFavorite';
+    };
     const data = {
       idBook: open.idBook,
       idUser: localStorage.getItem('idUser'),
     };
-    axios.delete("https://my-library-backend-italy.herokuapp.com/deleteBook", {
+    axios.delete(`https://my-library-backend-italy.herokuapp.com/${request}`, {
       params: data
     }).then(res => {
       snackOpenFun(res.data, 'success');
@@ -314,7 +322,11 @@ export default function PersonalPage() {
       <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
       : selectedIndex === 2 ?
       <MenuItem onClick={handleMenuClose}>+ To Read</MenuItem>
-      : null
+      :
+      <>
+        <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
+        <MenuItem onClick={handleMenuClose}>+ To Read</MenuItem>
+      </>
     }
     </Menu>
   );
@@ -335,6 +347,16 @@ export default function PersonalPage() {
   };
 
   const renderDialog = () => {
+    let finalText;
+    if (selectedIndex === 1) {
+      finalText = ' from your books to read';
+    } else if (selectedIndex === 2) {
+      finalText = ' from your read books';
+    } else if (selectedIndex === 3) {
+      finalText = ' from your favorites';
+    } else {
+      finalText = '';
+    };
     return (
       <Dialog
         open={open.open}
@@ -344,7 +366,7 @@ export default function PersonalPage() {
         <DialogTitle id="alert-dialog-title">{open.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete <span style={{color: 'black'}}>{open.title}</span> of <span style={{color: 'black'}}>{open.author}</span>?
+            Are you sure you want to delete <span style={{color: 'black'}}>{open.title}</span> of <span style={{color: 'black'}}>{open.author}</span>{finalText}?
           </DialogContentText>
         </DialogContent>
         <DialogActions className={classes.dialogButtons}>
@@ -416,13 +438,9 @@ export default function PersonalPage() {
                     />
                   </div>
                   <div className={classes.deleteButton}>
-                    {
-                      selectedIndex === 1 || selectedIndex === 2 ?
-                        <IconButton aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleChangeType(e, i)} color="inherit" style={{paddingRight: 0}}>
-                          <MoreVertIcon/>
-                        </IconButton>
-                      : <MoreVertIcon  style={{color: 'grey'}}/>
-                    }
+                    <IconButton aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleChangeType(e, i)} color="inherit" style={{paddingRight: 0}}>
+                      <MoreVertIcon/>
+                    </IconButton>
                     <IconButton onClick={e => handleClickOpen(i)} style={{color: '#f44336'}}>
                       <DeleteIcon/>
                     </IconButton>
