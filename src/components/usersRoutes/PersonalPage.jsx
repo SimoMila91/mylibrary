@@ -279,13 +279,22 @@ export default function PersonalPage() {
       idBook: open.idBook,
       idUser: localStorage.getItem('idUser'),
     };
-    axios.delete(`https://my-library-backend-italy.herokuapp.com/${request}`, {
-      params: data
-    }).then(res => {
-      snackOpenFun(res.data, 'success');
-      handleClose();
-      request();
-    }).catch(err => console.log(err));
+    if (selectedIndex === 0) {
+      axios.delete(`https://my-library-backend-italy.herokuapp.com/${request}`, {
+        params: data
+      }).then(res => {
+        handleClose();
+        snackOpenFun(res.data, 'success');
+        request();
+      }).catch(err => console.log(err));
+    } else {
+      axios.put(`https://my-library-backend-italy.herokuapp.com/${request}`, data)
+        .then(res => {
+          handleClose();
+          snackOpenFun(res.data, 'success');
+          request();
+        }).catch(err => console.log(err));
+    };
   };
 
   const handleChangeType = (e, i) => {
@@ -323,10 +332,10 @@ export default function PersonalPage() {
       : selectedIndex === 2 ?
       <MenuItem onClick={handleMenuClose}>+ To Read</MenuItem>
       :
-      <>
+      <div>
         <MenuItem onClick={handleMenuClose}>+ Read</MenuItem>
         <MenuItem onClick={handleMenuClose}>+ To Read</MenuItem>
-      </>
+      </div>
     }
     </Menu>
   );
@@ -441,7 +450,7 @@ export default function PersonalPage() {
                     <IconButton aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleChangeType(e, i)} color="inherit" style={{paddingRight: 0}}>
                       <MoreVertIcon/>
                     </IconButton>
-                    <IconButton onClick={e => handleClickOpen(i)} style={{color: '#f44336'}}>
+                    <IconButton onClick={e => handleClickOpen(i)} color="inherit">
                       <DeleteIcon/>
                     </IconButton>
                   </div>

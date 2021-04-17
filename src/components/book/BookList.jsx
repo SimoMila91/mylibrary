@@ -261,7 +261,7 @@ export default function BookList({
             <Card className={classes.root}>
               <img className={classes.cover} src={book.volumeInfo.imageLinks === undefined
                   ? `${notFoundImage}`
-                  : `${book.volumeInfo.imageLinks.thumbnail}`} alt={book.volumeInfo.title}/>
+                  : `${book.volumeInfo.imageLinks.thumbnail.replace('http', 'https')}`} alt={book.volumeInfo.title}/>
               <div className={classes.details}>
                 <CardContent>
                   <div className={classes.iconStar}>
@@ -272,7 +272,7 @@ export default function BookList({
                       {
                         book.favorite === true || clicks.includes(i)
                           ? <FavoriteIcon value={0}/>
-                          : <FavoriteBorderIcon value={1}/>
+                        : <FavoriteBorderIcon value={1}/>
                       }
                     </IconButton>
                   </div>
