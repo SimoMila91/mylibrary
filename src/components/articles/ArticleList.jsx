@@ -17,6 +17,7 @@ import {
   NewsContext
 } from '../../context/NewsContext';
 import noImage from '../../images/noImageArticle.jpg';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const font = "'Luckiest Guy', cursive";
 
@@ -52,7 +53,11 @@ const useStyles = makeStyles({
   buttonPos: {
     position: 'absolute',
     bottom: 3,
-  }
+  },
+  circularProgress: {
+    display: 'flex',
+    margin: 'auto'
+  },
 });
 
 const truncateString = (str, n) => {
@@ -93,6 +98,7 @@ export default function ArticleList() {
                                 <Grid className={classes.itemStyle} item>
                                     <Card className={classes.root}>
                                         <CardActionArea>
+                                          <a target="_blank" rel="noreferrer" href={news.link} style={{ color: 'inherit', "&:hover": { color: 'inherit'}, textDecoration: 'none'}}>
                                             <CardMedia
                                                 component="img"
                                                 alt="Contemplative Reptile"
@@ -110,6 +116,7 @@ export default function ArticleList() {
                                                 </Typography>
 
                                             </CardContent>
+                                          </a>
                                         </CardActionArea>
                                         <CardActions className={classes.buttonPos}>
                                             <Typography variant="subtitle2" color="textSecondary" component="span">
@@ -122,7 +129,10 @@ export default function ArticleList() {
                                     </Card>
                                 </Grid>
                                 </Grid>
-                        )) : null
+                        )) :
+                            <div className={classes.circularProgress}>
+                              <CircularProgress />
+                            </div>
                     }
                 </Grid>
             </Container>

@@ -8,13 +8,14 @@ import NewsArticle from './home/NewsArticles';
 import { NavLink } from 'react-router-dom';
 import booklover from '../images/unDraw/booklover.svg';
 import backgroundImg from '../images/unDraw/backgroundsvg.svg';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        paddingTop: '4%', 
-        textAlign: 'center', 
+        paddingTop: '4%',
+        textAlign: 'center',
     },
     newBook: {
         width: 'auto',
@@ -52,8 +53,11 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
            display: 'none',
         },
-
-    }
+    },
+    circularProgress: {
+        display: 'flex',
+        margin: 'auto'
+    },
 }));
 
 export default function Home(props) {
@@ -93,8 +97,10 @@ export default function Home(props) {
                 <Grid container spacing={2}>
                     {
                         article ? article.slice(0, 6).map((news, i) => <NewsArticle news={news} key={i} /> )
-                        : 
-                        <p>Loading</p>                   
+                        :
+                        <div className={classes.circularProgress}>
+                            <CircularProgress />
+                        </div>
                     }
                 </Grid>
                 <Button component={NavLink} to="/articles" className={classes.marginButton} variant="contained" color="inherit">
