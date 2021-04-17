@@ -286,7 +286,6 @@ export default function PersonalPage() {
   };
 
   const handleMenuClose = (e) => {
-    console.log(e.currentTarget.textContent.slice(2));
     const payload = {
       idBook: results[id].idBook,
       type: e.currentTarget.textContent.slice(2),
