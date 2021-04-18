@@ -155,7 +155,7 @@ export default function BookList({
 
   useEffect(() => {
     setClicks([]);
-  }, [books])
+  }, [books]);
 
   const handleMenuClose = (e) => {
     if (loggedIn) {
@@ -197,14 +197,13 @@ export default function BookList({
         i
       ]);
       localStorage.setItem('clicks', clicks);
-      console.log(localStorage.getItem('clicks'));
       let value = e.target.getAttribute("value");
-      if (value === null) {
+      if (value === null || value === undefined) {
         value = 0;
       };
-      console.log(value + " per database");
       const parse = parseInt(value);
       const book = books[i];
+      console.log(book);
       const payload = {
         idBook: book.id,
         title: book.volumeInfo.title.replaceAll("'", "''"),
@@ -226,14 +225,12 @@ export default function BookList({
           book.volumeInfo.publishedDate.slice(0, 4) : '0000',
         idUser: localStorage.getItem('idUser'),
         favorite: parse
-      }
+      };
       favoriteBook(payload, snackOpenFun);
-
     } else {
       handleOpenForm();
       snackOpenFun('You need to login first', 'info');
     }
-
   };
 
   const menuId = 'primary-search-account-menu';
@@ -268,7 +265,7 @@ export default function BookList({
                     <IconButton edge="end" aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleProfileMenuOpen(e, i)} color="inherit">
                       <MoreVertIcon/>
                     </IconButton>
-                    <IconButton edge="end" onClick={e => favoriteCall(e, i)}>
+                    <IconButton edge="end" onClick={(e) => favoriteCall(e, i)}>
                       {
                         book.favorite === true || clicks.includes(i)
                           ? <FavoriteIcon value={0}/>
