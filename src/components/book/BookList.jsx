@@ -190,17 +190,17 @@ export default function BookList({
     setAnchorEl(null);
   };
 
+ 
   const favoriteCall = (e, i) => {
     if (loggedIn) {
-      setClicks(oldArray => [
-        ...oldArray,
-        i
-      ]);
+      let result =  clicks.includes(i)? clicks.filter(click => click !==  i): [...clicks, i];
+      setClicks(result);
       localStorage.setItem('clicks', clicks);
       let value = e.target.getAttribute("value");
-      if (value === null || value === undefined) {
-        value = 0;
+      if (value === null) {
+        value = 0; 
       };
+      console.log(value);
       const parse = parseInt(value);
       const book = books[i];
       console.log(book);
@@ -265,11 +265,11 @@ export default function BookList({
                     <IconButton edge="end" aria-label="add book" aria-controls={menuId} aria-haspopup="true" onClick={(e) => handleProfileMenuOpen(e, i)} color="inherit">
                       <MoreVertIcon/>
                     </IconButton>
-                    <IconButton edge="end" onClick={(e) => favoriteCall(e, i)}>
+                    <IconButton edge="end" onClick={e => favoriteCall(e, i)}>
                       {
                         book.favorite === true || clicks.includes(i)
-                          ? <FavoriteIcon value={0}/>
-                        : <FavoriteBorderIcon value={1}/>
+                          ? <FavoriteIcon value={0} />
+                          : <FavoriteBorderIcon value={1} />
                       }
                     </IconButton>
                   </div>
