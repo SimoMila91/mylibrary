@@ -27,6 +27,11 @@ export default function Main() {
             <PrivateRoute path="/settings" component={Settings} />
             <PrivateRoute path="/articles" component={ArticleList} />
             <PrivateRoute path="/profile" component={PersonalPage} />
+            <Route render= { () => {
+              return (
+                <p>404 -  page not found</p>
+              )
+            }} />
         </Switch>
   )
 };

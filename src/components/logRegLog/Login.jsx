@@ -97,7 +97,14 @@ export default function Login({ handleClose }) {
                 renderButton();
                 handleClose();
             }).catch(err => {
-                snackOpenFun(err.response.data, 'info');
+                if (err.response.status === 409 || err.response.status === 401) {
+                  snackOpenFun(err.response.data, 'error');
+                } else if (err.response.status === 401) {
+                  snackOpenFun(err.response.data, 'i');
+                } else {
+                  snackOpenFun('Internal server error, try again later or contact the site owner', 'info');
+                }
+                
             });
     };
 
