@@ -135,8 +135,11 @@ export default function Login({
         setForm('Login');
         handleClose();
       }).catch((err) => {
-        console.log(err.response);
-        snackOpenFun(err.response.data, 'info');
+        if (err.response.status === 409) {
+          snackOpenFun(err.response.data, 'error');
+        } else {
+          snackOpenFun('Internal server error, try again later or contact the site owner', 'warning');
+        }
       });
   };
 

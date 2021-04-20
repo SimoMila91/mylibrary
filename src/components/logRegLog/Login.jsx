@@ -102,7 +102,7 @@ export default function Login({ handleClose }) {
                 } else if (err.response.status === 401) {
                   snackOpenFun(err.response.data, 'i');
                 } else {
-                  snackOpenFun('Internal server error, try again later or contact the site owner', 'info');
+                  snackOpenFun('Internal server error, try again later or contact the site owner', 'warning');
                 }
                 
             });

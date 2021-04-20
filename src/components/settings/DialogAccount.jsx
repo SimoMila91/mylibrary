@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import { Context } from '../../context/Context';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   right: {
@@ -49,6 +50,7 @@ export default function DialogAccount(props) {
   const [show, setShow] = useState(showInitialSettings);
   const [psw, setPsw] = useState('');
   const [checkPsw, setCheckPsw] = useState('');
+  const history = useHistory();
 
   const handleRequest = (e) => {
     e.preventDefault();
@@ -114,13 +116,25 @@ export default function DialogAccount(props) {
       psw: psw,
       idUser: localStorage.getItem('idUser'),
     };
-    axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, payload)
+    axios.post(`https://my-library-backend-italy.herokuapp.com/checkPsw`, payload)
     .then(res => {
-      console.log(res);
-      props.handleClose();
+      axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, {
+        params: payload
+      }).then(res => {
+        snackOpenFun(res.data, 'success');
+        localStorage.clear();
+        history.push('/');
+        props.handleClose();
+      }).catch(err => {
+        console.log(err);
+      });
     }).catch(err => {
-      console.log(err);
-    });
+      if (err.response.status === 401) {
+        snackOpenFun(err.response.data, 'error');
+      } else {
+        snackOpenFun('Internal server error, try again later or contact the site owner', 'warning');
+      }
+    })
   };
 
   const controlButton = email.length > 8 && text.length > 0 ? { color: 'secondary' } : { disabled: true };
