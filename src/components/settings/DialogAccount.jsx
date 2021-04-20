@@ -121,10 +121,10 @@ export default function DialogAccount(props) {
       axios.delete(`https://my-library-backend-italy.herokuapp.com/${props.request}`, {
         params: payload
       }).then(res => {
+        props.handleClose();
         snackOpenFun(res.data, 'success');
         localStorage.clear();
         history.push('/');
-        props.handleClose();
       }).catch(err => {
         console.log(err);
       });
