@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {
+  ThemeProvider,
+  createMuiTheme
+} from '@material-ui/core/styles';
 import axios from 'axios';
 
 const font = "'Raleway', sans serif";
@@ -32,11 +35,14 @@ axios.interceptors.response.use(response => {
   throw error;
 });
 
-const Index = () => (
-  <ThemeProvider theme={theme}>
-    <App />
-  </ThemeProvider>
+const Index = () => ( <
+  ThemeProvider theme = {
+    theme
+  } >
+  <
+  App / >
+  <
+  /ThemeProvider>
 );
 
-ReactDOM.render(<Index />, document.getElementById('root'));
-
+ReactDOM.render( < Index / > , document.getElementById('root'));
