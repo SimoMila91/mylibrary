@@ -35,14 +35,9 @@ axios.interceptors.response.use(response => {
   throw error;
 });
 
-const Index = () => ( <
-  ThemeProvider theme = {
-    theme
-  } >
-  <
-  App / >
-  <
-  /ThemeProvider>
+const Index = () => ( 
+<ThemeProvider theme = { theme } >
+  <App / >
+</ThemeProvider>
 );
-
 ReactDOM.render( < Index / > , document.getElementById('root'));
