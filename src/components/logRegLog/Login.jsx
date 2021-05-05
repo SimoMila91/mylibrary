@@ -97,7 +97,7 @@ export default function Login({ handleClose }) {
                 renderButton();
                 handleClose();
             }).catch(err => {
-                if (err.response.status === 409 || err.response.status === 401) {
+                if (err.response.status === 401) {
                   snackOpenFun(err.response.data, 'error');
                 } else if (err.response.status === 401) {
                   snackOpenFun(err.response.data, 'i');
