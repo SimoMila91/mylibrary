@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   fontStyle: {
     marginTop: 10,
+    fontSize: 18
   },
   maxHeight: {
     height: '100%',
@@ -57,6 +58,11 @@ export default function NewsArticle({
   news
 }) {
   const classes = useStyles();
+
+  const truncateString = (str, n) => {
+    return (str.length > n) ? <>{str.substr(0, n - 1)} ...</> : str;
+  };
+
   return (
     <Grid item xs={12} sm={6} md={4}>
             <Grid item className={classes.maxHeight}>
@@ -66,7 +72,7 @@ export default function NewsArticle({
                     <Card>
                         <CardMedia onError={addSrcImage} className={classes.mediaStyle} image={news.media ? check(news.media) : `${noImage}` } />
                     </Card>
-                    <p className={classes.content}>{news.summary}</p>
+                    <p className={classes.content}>{truncateString(news.summary, 400)}</p>
                     <p className={classes.linkMore}><em>Read more here</em> <a href={news.link} targer="_blank"><em>{news.clean_url}</em></a></p>
                 </Paper>
             </Grid>

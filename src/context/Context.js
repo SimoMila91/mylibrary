@@ -1,4 +1,5 @@
 import React, { useState, createContext } from 'react';
+import { useHistory } from 'react-router-dom';
 
 export const Context = createContext();
 export const ContextProvider = props => {
@@ -18,6 +19,11 @@ export const ContextProvider = props => {
     const [language, setLanguage] = useState('it');
     const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token'));
     const [selectedForm, setForm] = useState('Login');
+    const history = useHistory();
+
+    if (localStorage.length < 3) {
+      history.push('/'); 
+    };
 
     const handleFilterGenreChange = e => {
         const { value } = e.target;

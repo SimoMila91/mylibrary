@@ -24,18 +24,18 @@ export default function App() {
 
   return (
     <div className="App">
+    <BrowserRouter>
       <ContextProvider>
-        <BrowserRouter>
-          <Container style={{ overflow: 'hidden' }} disableGutters maxWidth={false}>
-            <Navbar />
-            <NewsContextProvider>
-              <Main />
-            </NewsContextProvider>
-            <SnackBar />
-          </Container>
-          <Footer />
-        </BrowserRouter>
+        <Container style={{ overflow: 'hidden' }} disableGutters maxWidth={false}>
+          <Navbar />
+          <NewsContextProvider>
+            <Main />
+          </NewsContextProvider>
+          <SnackBar />
+        </Container>
+        <Footer />
       </ContextProvider>
+      </BrowserRouter>
     </div>
   );
 }

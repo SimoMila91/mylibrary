@@ -64,8 +64,6 @@ const truncateString = (str, n) => {
   return (str.length > n) ? <>{str.substr(0, n - 1)} ...</> : str;
 };
 
-//const renderHTML = (rawHTML) => React.createElement("div", { dangerouslySetInnerHTML: { __html: rawHTML } });
-
 const addDefaultSrc = (ev) => {
   ev.target.src = `${noImage}`;
 };
