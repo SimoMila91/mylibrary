@@ -193,6 +193,7 @@ export default function DialogAccount(props) {
                               value={psw}
                               onChange={e => setPsw(e.target.value)}
                               className={classes.marginTextfield}
+                              autoFocus
                             />
                           <TextField id="checkPsw" label="Retype your password"
                               fullWidth margin="normal" InputLabelProps={{

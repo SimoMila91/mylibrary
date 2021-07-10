@@ -1,7 +1,6 @@
 import React, {
   useState,
-  useContext,
-  useEffect
+  useContext
 } from 'react';
 import notFoundImage from '../../images/unDraw/void.svg';
 import {
@@ -122,7 +121,8 @@ const truncateString = (str, n) => {
 };
 
 export default function BookList({
-  books
+  books,
+  onTermSubmit
 }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -134,9 +134,6 @@ export default function BookList({
     snackOpenFun
   } = useContext(Context);
   const isMenuOpen = Boolean(anchorEl);
-  const [clicks, setClicks] = useState(
-    localStorage.getItem('clicks') ?
-    localStorage.getItem('clicks') : []);
 
   const handleOpenDetails = (id) => {
     setOpenDetails(true);
@@ -152,10 +149,6 @@ export default function BookList({
     setId(i);
     setAnchorEl(event.currentTarget);
   };
-
-  useEffect(() => {
-    setClicks([]);
-  }, [books]);
 
   const handleMenuClose = (e) => {
     if (loggedIn) {
@@ -193,9 +186,6 @@ export default function BookList({
  
   const favoriteCall = (e, i) => {
     if (loggedIn) {
-      let result =  clicks.includes(i)? clicks.filter(click => click !==  i): [...clicks, i];
-      setClicks(result);
-      localStorage.setItem('clicks', clicks);
       let value = e.target.getAttribute("value");
       if (value === null) {
         value = 0; 
@@ -227,6 +217,8 @@ export default function BookList({
         favorite: parse
       };
       favoriteBook(payload, snackOpenFun);
+      const term = localStorage.getItem('term');
+      onTermSubmit(term);
     } else {
       handleOpenForm();
       snackOpenFun('You need to login first', 'info');
@@ -267,7 +259,7 @@ export default function BookList({
                     </IconButton>
                     <IconButton edge="end" onClick={e => favoriteCall(e, i)}>
                       {
-                        book.favorite === true || clicks.includes(i)
+                        book.favorite === true 
                           ? <FavoriteIcon value={0} />
                           : <FavoriteBorderIcon value={1} />
                       }

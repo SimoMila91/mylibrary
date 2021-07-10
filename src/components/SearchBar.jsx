@@ -50,7 +50,6 @@ export default function SearchBar({ onFormSubmit }) {
     const onSubmit = e => {
         e.preventDefault();
         if (term !== '') {
-            localStorage.removeItem('clicks');
             onFormSubmit(term);
         }
     };
@@ -65,11 +64,11 @@ export default function SearchBar({ onFormSubmit }) {
         setIsOpen(false);
         if (filterGenre !== '') {
             setTerm('');
-            localStorage.removeItem('clicks');
             onFormSubmit(filterGenre);
         } else {
-            if (term !== '')
+            if (term !== '') {
                 onFormSubmit(term);
+            }
         }
     };
 

@@ -33,7 +33,7 @@ export default function Book() {
         console.log(response);
         if (response.status === 200) {
             setBooks(response.data);
-            localStorage.removeItem('clicks');
+            localStorage.setItem('term', term);
         };
     };
 
@@ -53,7 +53,7 @@ export default function Book() {
             <Container className={classes.searchStyle}>
                 <SearchBar onFormSubmit={onTermSubmit} />
             </Container>
-            <BookList books={books.sort(sortFunction)} />
+            <BookList onTermSubmit={onTermSubmit} books={books.sort(sortFunction)} />
         </React.Fragment>
     );
 };
