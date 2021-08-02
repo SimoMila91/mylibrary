@@ -190,10 +190,8 @@ export default function BookList({
       if (value === null) {
         value = 0; 
       };
-      console.log(value);
       const parse = parseInt(value);
       const book = books[i];
-      console.log(book);
       const payload = {
         idBook: book.id,
         title: book.volumeInfo.title.replaceAll("'", "''"),
